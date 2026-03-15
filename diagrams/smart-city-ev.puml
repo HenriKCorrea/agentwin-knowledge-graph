@@ -1,0 +1,115 @@
+' Type: Symbol
+' Zero or One:  |o--
+' Exactly One:  ||--
+' Zero or Many: }o--
+' One or Many:  }|--
+
+
+' | Type           | Symbol   | Purpose                                       |
+' | -------------- | -------- | --------------------------------------------- |
+' | Extension      |   <|--   | Specialization of a class in a hierarchy      |
+' | Implementation |   <|..   | Realization of an interface by a class        |
+' | Composition    |   *--    | The part cannot exist without the whole       |
+' | Aggregation    |   o--    | The part can exist independently of the whole |
+' | Dependency     |   -->    | The object uses another object                |
+' | Dependency     |   ..>    | A weaker form of dependency                   |
+
+@startuml Smart City EV
+
+' enum VehicleType {
+'     bicycle
+'     bus
+'     car
+'     caravan
+'     motorcycle
+'     motorscooter
+'     truck
+' }
+
+' enum SocketType {
+'     Caravan_Mains_Socket
+'     CHAdeMO
+'     CCS_SAE
+'     Dual_CHAdeMO
+'     Dual_J_1772
+'     Dual_Mennekes
+'     J_1772
+'     Mennekes
+'     Other
+'     Tesla
+'     Type2
+'     Type3
+'     Wall_Euro
+' }
+
+enum ChargingStationStatus {
+    almostEmpty
+    almostFull
+    empty
+    full
+    outOfService
+    withIncidence
+    working
+}
+
+class Address {
+    addressCountry: string
+    addressLocality: string
+    addressRegion: string
+    postOfficeBoxNumber: string
+    postalCode: string
+    streetAddress: string
+}
+
+enum GeoType {
+    Point
+    LineString
+    Polygon
+    MultiPoint
+    MultiLineString
+    MultiPolygon
+}
+
+class GeoLocation {
+    type: GeoType
+    coordinates: string /' Depends on the type of the location. '/
+}
+
+class NGSILDBaseModel {
+    ' dataProvider: string
+    ' dateModified: dateTime
+    ' dateCreated: dateTime
+    ' source: string
+    ' alternateName: string
+    ' name: string
+    ' description: string
+    ' owner: string
+    ' seeAlso: string
+}
+
+entity EVChargingStation extends NGSILDBaseModel {
+    capacity: int /' The total number of vehicles which can be charged at the same time. The total number of sockets can be higher. '/
+    ' socketNumber: int /' The total number of sockets offered by this charging station. '/ 
+    availableCapacity: int /' The number of vehicles which currently can be charged. '/
+    ' allowedVehicleType: VehicleType /' Vehicle type(s) which can be charged. '/
+    ' socketType: SocketType /' The type of sockets offered by this station. '/
+    ' openingHours: string /' The opening hours of the charging station. '/
+    status: ChargingStationStatus /' Status of the charging station. '/
+    ' network: string /' The name of the Network, with that the operator cooperates. '/
+    ' operator: string /' Charging station's operator. '/
+    ' contactPoint: ContactPoint /' Charging station contact point. '/
+    amperage: double /' The total amperage offered by the charging station. Units:'Ampers (A) '/
+    voltage: double /' The total voltage offered by the charging station. Units:'Volts (V)' '/
+    ' chargeType: enum {annualPayment, flat, free, monthlyPayment, other} /'  '/
+    ' acceptedPaymentMethod: enum {ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm} /' Type(s) of charge when using this station. Model:'https://schema.org/Text'. Enum:'ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm' '/
+}
+
+entity Pole {
+}
+
+NGSILDBaseModel *-- GeoLocation : location
+NGSILDBaseModel *-- Address : address
+
+
+
+@enduml

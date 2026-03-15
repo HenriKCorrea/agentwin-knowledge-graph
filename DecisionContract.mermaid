@@ -1,0 +1,78 @@
+flowchart LR
+  subgraph SC[Smart City Twin]
+    S1[EVChargingStation]
+    S2[NGSILD Base fields\nlocation address timestamps]
+  end
+
+  subgraph EG[Energy Grid Twin]
+    E1[ElectricVehicle]
+    E2[UsagePoint Meter VoltageLevel Substation]
+  end
+
+  S1 --> T1
+  S2 --> T1
+  E1 --> T1
+  E2 --> T1
+
+  subgraph MAP[Transformation Layer]
+    T1[Normalize + Validate + Enrich]
+    T2[Unit conversion\nA V to kW]
+    T3[Semantic alignment\ncapacity disambiguation]
+    T4[Freshness and quality gates]
+    T5[Derived fields\nenergyNeeded_kWh requiredPower_kW]
+    T1 --> T2 --> T3 --> T4 --> T5
+  end
+
+  T5 --> C1
+  subgraph CONTRACT[Stable Decision Contract V1]
+    C1[EVDemand\nevId socNow socTarget deadline\npMin pMax batteryCapacity]
+    C2[ChargerSupply\nstationId status availableSlots\nmaxPower socketType location]
+    C3[GridEnvelope\nzoneId maxImportNow\nvoltageBand congestionState\nvalidFrom validTo]
+    C4[Global semantics\nunits time identity freshness]
+  end
+
+  C1 --> D1
+  C2 --> D1
+  C3 --> D1
+  C4 --> D1
+
+  subgraph DEC[Decision Service]
+    D1[Feasibility and optimization]
+    D2[Output\nassignment setpoint schedule\nreasonCodes confidence]
+    D1 --> D2
+  end
+
+  D2 --> A1[Audit trail\nsource fields transform rule ids timestamps]
+
+  %% classDef src fill:#dfefff,stroke:#2b6cb0,stroke-width:1px;
+  %% classDef map fill:#fff4db,stroke:#b7791f,stroke-width:1px;
+  %% classDef con fill:#e6ffed,stroke:#2f855a,stroke-width:1px;
+  %% classDef dec fill:#fde8e8,stroke:#c53030,stroke-width:1px;
+
+  %% class S1,S2,E1,E2 src;
+  %% class T1,T2,T3,T4,T5 map;
+  %% class C1,C2,C3,C4 con;
+  %% class D1,D2,A1 dec;
+
+%% Smart city twin and energy grid twin provide:
+%% - Runtime instance data
+%% - Schema/ontology context
+%% - Relationship topology
+
+%% Transformation layer:
+%% - Is a software pipeline
+%% - Produces normalized, validated decision-ready objects
+%% - Enforces units, time semantics, identity, and data quality
+%%   - This is the stable decision contract.
+
+%% Decision service:
+%% - Runs feasibility checks and constraint reasoning
+%% - Produces decision candidates and explanations
+%% - Hands off to planning/execution downstream (out of scope now)
+
+%% A concise pipeline sentence for the paper:
+%% - Input knowledge graphs 
+%% - Runtime semantic grounding and transformation
+%% - Stable decision contract
+%% - Feasibility decision service
+%% - Planning/execution (future work).
