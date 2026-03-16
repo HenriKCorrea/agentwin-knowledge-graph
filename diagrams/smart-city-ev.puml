@@ -52,15 +52,6 @@ enum ChargingStationStatus {
     working
 }
 
-class Address {
-    addressCountry: string
-    addressLocality: string
-    addressRegion: string
-    postOfficeBoxNumber: string
-    postalCode: string
-    streetAddress: string
-}
-
 enum GeoType {
     Point
     LineString
@@ -70,6 +61,15 @@ enum GeoType {
     MultiPolygon
 }
 
+class Address {
+    addressCountry: string
+    addressLocality: string
+    addressRegion: string
+    postOfficeBoxNumber: string
+    postalCode: string
+    streetAddress: string
+}
+
 class GeoLocation {
     type: GeoType
     coordinates: string /' Depends on the type of the location. '/
@@ -77,7 +77,7 @@ class GeoLocation {
 
 class NGSILDBaseModel {
     ' dataProvider: string
-    ' dateModified: dateTime
+    dateModified: dateTime
     ' dateCreated: dateTime
     ' source: string
     ' alternateName: string
@@ -85,6 +85,32 @@ class NGSILDBaseModel {
     ' description: string
     ' owner: string
     ' seeAlso: string
+    location: GeoLocation
+    address: Address
+}
+
+' Spatial-object represents everything that can have a spatial representation. It is superclass of feature and geometry. GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+class SpatialObject {
+    
+}
+
+' The class represents the top-level geometry type. This class is equivalent to the UML class GM_Object defined in ISO 19107, and it is superclass of all geometry types. GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+class Geometry extends SpatialObject {
+
+}
+
+' This class represents the top-level feature type. This class is equivalent to GFI_Feature defined in ISO 19156:2011, and it is superclass of all feature types. GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+class Feature extends SpatialObject {
+
+}
+
+' Generic class for describing city objects.
+class CityObject extends Feature {
+
+}
+
+class CityFurniture extends CityObject {
+
 }
 
 entity EVChargingStation extends NGSILDBaseModel {
@@ -104,12 +130,17 @@ entity EVChargingStation extends NGSILDBaseModel {
     ' acceptedPaymentMethod: enum {ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm} /' Type(s) of charge when using this station. Model:'https://schema.org/Text'. Enum:'ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm' '/
 }
 
-entity Pole {
+entity Pole extends CityFurniture {
 }
+
+SpatialObject --> SpatialObject : Contains
+SpatialObject --> SpatialObject : Within
+
+Feature --> Geometry : hasGeometry
 
 NGSILDBaseModel *-- GeoLocation : location
 NGSILDBaseModel *-- Address : address
 
-
+Pole --> EVChargingStation : refEVChargingStation
 
 @enduml
