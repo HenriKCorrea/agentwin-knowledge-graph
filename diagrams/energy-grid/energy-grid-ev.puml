@@ -1,0 +1,102 @@
+@startuml Energy Grid EV
+
+enum AMIBillingReady {
+    enabled
+    operable
+    billingApproved
+    nonAmi
+    amiDisabled
+    amiCapable
+    nonMetered
+}
+
+' This is a root class to provide common identification for all classes needing identification and naming attributes.
+entity IdentifiedObject {
+    description: string /' The description is a free human readable text describing or naming the object. It may be non unique and may not correlate to a naming hierarchy. '/
+    mRID: string /' Master resource identifier issued by a model authority. The mRID is unique within an exchange context. Global uniqueness is easily achieved by using a UUID, as specified in RFC 4122, for the mRID. The use of UUID is strongly recommended. For CIMXML data files in RDF syntax conforming to IEC 61970-552, the mRID is mapped to rdf:ID or rdf:about attributes that identify CIM object elements. '/
+    name: string /' The name is any free human readable and possibly non unique text naming the object. '/
+    energyIdentCodeEic: string /' The attribute is used for an exchange of the EIC code (Energy identification Code). The length of the string is 16 characters as defined by the EIC code. For details on EIC scheme please refer to ENTSO-E web site. '/
+    shortName: string /' The attribute is used for an exchange of a human readable short name with length of the string 12 characters maximum. '/
+}
+
+' A power system resource (PSR) can be an item of equipment such as a switch, an equipment container containing many individual items of equipment such as a substation, or an organisational entity such as sub-control area. Power system resources can have measurements associated.
+entity PowerSystemResource extends IdentifiedObject {
+}
+
+' Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
+entity ConnectivityNode extends IdentifiedObject {
+    TerminalCount: int /' The connectivity node to which this terminal connects with zero impedance. This propoerty to defined total number of terminals connected to a node. '/
+    -- BoundaryPoint --> BoundaryPoint /' The boundary point associated with this connectivity node. '/
+    ' ConnectivityNodeContainer --> ConnectivityNodeContainer /' Container of this connectivity node. '/ 
+}
+
+' A base class for all objects that may contain connectivity nodes or topological nodes.
+entity ConnectivityNodeContainer extends PowerSystemResource  {
+    ' connectivityNodes --> ConnectivityNode /' Connectivity nodes contained in this container. '/
+}
+
+' The parts of a power system that are physical devices, electronic or mechanical.
+entity Equipment extends PowerSystemResource {
+    aggregate: float /' The aggregate flag provides an alternative way of representing an aggregated (equivalent) element. It is applicable in cases when the dedicated classes for equivalent equipment do not have all of the attributes necessary to represent the required level of detail.  In case the flag is set to “true” the single instance of equipment represents multiple pieces of equipment that have been modelled together as an aggregate equivalent obtained by a network reduction procedure. Examples would be power transformers '/
+    normallyInService: float /' Specifies the availability of the equipment under normal operating conditions. True means the equipment is available for topology processing, which determines if the equipment is energized or not. False means that the equipment is treated by network applications as if it is not in the model. '/
+    ' EquipmentContainer --> EquipmentContainer /' Container of this equipment. '/
+    -- OperationalLimitSet --> OperationalLimitSet /' The operational limit sets associated with this equipment. '/
+}
+
+' A modelling construct to provide a root class for containing equipment.
+entity EquipmentContainer extends ConnectivityNodeContainer {
+    ' Equipments --> Equipment /' Contained equipment. '/
+}
+
+' Adapted from CIM and https://github.com/smart-data-models/dataModel.EnergyCIM/ data models: an electcric vehicle model
+entity ElectricVehicle {
+    evName: string /' The name of the electric vehicle. '/
+    capacity: double /' Total EV battery capacity. '/
+    chargeMin: double /' Minimum charge limit. '/
+    chargeRateMin: double /' Minimum charging rate. '/
+    chargeRateMax: double /' Maximum charging rate. '/
+    dischargeRateMin: double /' Minimum discharge rate. '/
+    dischargeRateMax: double /' Maximum discharge rate. '/
+    chargeTarget: double /' Target capacity to be charged '/
+    chargeTargetTimestamp: dateTime /' Target end datetime to be charged '/
+    -- connectedTo_ChargingStation --> EVChargingStation /' EV --> ChargingStation '/
+}
+
+' Logical or physical point in the network to which readings or events may be attributed. Used at the place where a physical or virtual meter may be located; however, it is not required that a meter be present.
+entity UsagePoint {
+    amiBillingReady: AMIBillingReady /' Tracks the lifecycle of the metering installation at a usage point with respect to readiness for billing via advanced metering infrastructure reads. '/
+    checkBilling: boolean /' True if as a result of an inspection or otherwise, there is a reason to suspect that a previous billing may have been performed with erroneous data. Value should be reset once this potential discrepancy has been resolved. '/
+    connectionCategory: string /' A code used to specify the connection category, e.g., low voltage or low pressure, where the usage point is defined. '/
+    connectionState: string /' State of the usage point with respect to connection to the network. '/
+    disconnectionMethod: string /' Is an indication of how the usage point is physically connected or disconnected. '/
+    estimatedLoad: float /' Estimated load (current flow). '/
+    grounded: boolean /' True if grounded. '/
+    isSdp: boolean /' If true, this usage point is a service delivery point, i.e., a usage point where the ownership of the service changes hands. '/
+    isVirtual: boolean /' If true, this usage point is virtual, i.e., no physical location exists in the network where a meter could be located to collect the meter readings. '/
+    minimalUsageExpected: boolean /' If true, minimal or zero usage is expected at this usage point for situations such as premises vacancy, logical or physical disconnect. '/
+    nominalServiceVoltage: float /' Nominal service voltage. '/
+    outageRegion: string /' Outage region in which this usage point is located. '/
+    phaseCode: string /' Phase code. Number of wires and specific nominal phases can be deduced from enumeration literal values. '/
+    phaseCount: integer /' Number of potential phases the Usage Point supports, typically 0, 1 or 3. '/
+    physicalConnectionCapacity: float /' Quantitative information about the maximum physical capacity of the connection for the usage point. '/
+    ratedCurrent: float /' Current flow that this usage point is configured to deliver. '/
+    ratedPower: float /' Active power that this usage point is configured to deliver. '/
+    readCycle: string /' Cycle day on which the meter for this usage point will normally be read.  Usually correlated with the billing cycle. '/
+    readRoute: string /' Identifier of the route to which this usage point is assigned for purposes of meter reading. Typically used to configure hand held meter reading systems prior to collection of reads. '/
+    serviceDeliveryRemark: string /' Remarks about this usage point, for example the reason for it being rated with a non-nominal priority. '/
+    servicePriority: string /' Priority of service for this usage point. Note that usage points at the same service location can have different priorities. '/
+    ' relatedEquipment --> Equipment /' connection to an equipment. '/
+}
+
+' EquipmentContainer "Equipments" <--> "EquipmentContainer" Equipment : contains /' Contained equipment. '/
+Equipment --> EquipmentContainer : EquipmentContainer /' Container of this equipment. '/
+
+EquipmentContainer --> Equipment : Equipments /' Contained equipment. '/
+
+ConnectivityNodeContainer --> ConnectivityNode : connectivityNodes /' Connectivity nodes contained in this container. '/
+
+ConnectivityNode --> ConnectivityNodeContainer : ConnectivityNodeContainer /' Container of this connectivity node. '/ 
+
+UsagePoint --> Equipment : relatedEquipment /' connection to an equipment. '/
+
+@enduml
