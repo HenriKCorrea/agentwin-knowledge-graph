@@ -1,14 +1,15 @@
-@startuml Energy Grid Transformer
+@startuml Energy Grid Substation
 
 !include energy-grid-equipment.puml
 !include energy-grid-region.puml
 
 ' The type of substations
-enum SubstationType {
-    MV_MV_substation
-    MV_LV_substation
-    LV_LV_substation
-}
+' MV/LV type determines which distribution level serves the charging stations
+' enum SubstationType {
+'     MV_MV_substation /' (Medium→Medium Voltage): upstream bulk grid, connects to MV/LV substations further down '/
+'     MV_LV_substation /' (Medium→Low Voltage, e.g., 11kV→400V): the "last mile" substation that directly serves neighborhoods, homes, and most charging stations '/
+'     LV_LV_substation /' (Low→Low Voltage): rare, special applications '/
+' }
 
 ' An electrical device consisting of two or more coupled windings, with or without a magnetic core, for introducing mutual coupling between electric circuits.
 ' Transformers can be used to control voltage and phase shift (active power flow).
@@ -17,13 +18,13 @@ enum SubstationType {
 ' A power transformer typically has two terminals.
 entity PowerTransformer extends ConductingEquipment {
     Name: string /' Power transformer name. For example, SAMWA0001 '/
-    PowerTransformerEnd: double /' The power transformer of this power transformer end. '/
-    beforeShCircuitHighestOperatingCurrent: double /' The highest operating current (Ib in the IEC 60909-0) before short circuit (depends on network configuration and relevant reliability philosophy). It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. Default: 0.0 '/
-    beforeShCircuitHighestOperatingVoltage: double /' The highest operating voltage (Ub in the IEC 60909-0) before short circuit. It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. This is worst case voltage on the low side winding (Section 3.7.1 in the standard). Used to define operating conditions. Default: 0.0 '/
-    beforeShortCircuitAnglePf: double /' The angle of power factor before short circuit (phib in the IEC 60909-0). It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. This is the worst case power factor. Used to define operating conditions. Default: 0.0 '/
-    highSideMinOperatingU: double /' The minimum operating voltage (uQmin in the IEC 60909-0) at the high voltage side (Q side) of the unit transformer of the power station unit. A value well established from long-term operating experience of the system. It is used for calculation of the impedance correction factor KG defined in IEC 60909-0 Default: 0.0 '/
-    isPartOfGeneratorUnit: double /' Indicates whether the machine is part of a power station unit. Used for short circuit data exchange according to IEC 60909 Default: False '/
-    operationalValuesConsidered: double /' It is used to define if the data (other attributes related to short circuit data exchange) defines long term operational conditions or not. Used for short circuit data exchange according to IEC 60909. Default: False '/
+    ' PowerTransformerEnd: double /' The power transformer of this power transformer end. WARNING: This attribute is an inconsistency. Probably copy and paste error. '/
+    ' beforeShCircuitHighestOperatingCurrent: double /' The highest operating current (Ib in the IEC 60909-0) before short circuit (depends on network configuration and relevant reliability philosophy). It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. Default: 0.0 '/
+    ' beforeShCircuitHighestOperatingVoltage: double /' The highest operating voltage (Ub in the IEC 60909-0) before short circuit. It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. This is worst case voltage on the low side winding (Section 3.7.1 in the standard). Used to define operating conditions. Default: 0.0 '/
+    ' beforeShortCircuitAnglePf: double /' The angle of power factor before short circuit (phib in the IEC 60909-0). It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. This is the worst case power factor. Used to define operating conditions. Default: 0.0 '/
+    ' highSideMinOperatingU: double /' The minimum operating voltage (uQmin in the IEC 60909-0) at the high voltage side (Q side) of the unit transformer of the power station unit. A value well established from long-term operating experience of the system. It is used for calculation of the impedance correction factor KG defined in IEC 60909-0 Default: 0.0 '/
+    ' isPartOfGeneratorUnit: double /' Indicates whether the machine is part of a power station unit. Used for short circuit data exchange according to IEC 60909 Default: False '/
+    ' operationalValuesConsidered: double /' It is used to define if the data (other attributes related to short circuit data exchange) defines long term operational conditions or not. Used for short circuit data exchange according to IEC 60909. Default: False '/
 }
 
 ' A PowerTransformerEnd is associated with each Terminal of a PowerTransformer.
@@ -36,7 +37,7 @@ entity PowerTransformerEnd {
     ' b: float /' Magnetizing branch susceptance (B mag).  The value can be positive or negative. '/
     ' g: float /' Magnetizing branch conductance. '/
     ' r: float /' Resistance (star-model) of the transformer end. The attribute shall be equal to or greater than zero for non-equivalent transformers. '/
-    ratedS: float /' Normal apparent power rating. The attribute shall be a positive value. For a two-winding transformer the values for the high and low voltage sides shall be identical. '/
+    ratedS: float /' Normal apparent power rating (maximum power capacity). The attribute shall be a positive value. For a two-winding transformer the values for the high and low voltage sides shall be identical. '/
     ' ratedU: float /' Rated voltage: phase-phase for three-phase windings, and either phase-phase or phase-neutral for single-phase windings. A high voltage side, as given by TransformerEnd.endNumber, shall have a ratedU that is greater than or equal to ratedU for the lower voltage sides. The attribute shall be a positive value. '/
     ' x: float /' Positive sequence series reactance (star-model) of the transformer end. '/
     ' PowerTransformer --> PowerTransformer /' The power transformer of this power transformer end. '/
@@ -46,7 +47,7 @@ entity PowerTransformerEnd {
 ' A collection of equipment for purposes other than generation or utilization, through which electric energy in bulk is passed for the purposes of switching or modifying its characteristics.
 entity Substation extends EquipmentContainer {
     substationName: string /' The name of the substation. '/
-    substationType: SubstationType /' The type of substations. '/
+    ' substationType: SubstationType /' The type of substations. '/
     ' dcConverterUnit --> DCConverterUnit /' The DC converter unit belonging of the substation. '/
     ' locatedAt --> SubGeographicalRegion /' The SubGeographicalRegion containing the substation. '/
 }
