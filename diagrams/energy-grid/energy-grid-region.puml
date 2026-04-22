@@ -7,7 +7,7 @@ entity Location {
     locationName: string /' location Name '/
     xPosition: double /' X axis position. '/
     yPosition: double /' Y axis position. '/
-    zPosition: double /' (if applicable) Z axis position. '/
+    ' zPosition: double /' (if applicable) Z axis position. '/
 }
 
 ' A subset of a geographical region of a power system network model.
@@ -15,9 +15,9 @@ entity SubGeographicalRegion extends IdentifiedObject, Location {
 }
 
 ' A geographical region of a power system network model.
-entity GeographicalRegion extends IdentifiedObject, Location {
-}
+' entity GeographicalRegion extends IdentifiedObject, Location {
+' }
 
-SubGeographicalRegion --> GeographicalRegion : withIn /' The geographical region which this sub-geographical region is within. '/
+' SubGeographicalRegion --> GeographicalRegion : withIn /' The geographical region which this sub-geographical region is within. '/
 
 @enduml
