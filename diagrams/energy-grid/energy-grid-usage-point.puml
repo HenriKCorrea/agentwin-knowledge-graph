@@ -1,6 +1,6 @@
 @startuml Energy Grid Usage Point
 
-!include energy-grid-common.puml
+!include energy-grid-equipment.puml
 
 enum AMIBillingReady {
     enabled

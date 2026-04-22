@@ -1,0 +1,23 @@
+@startuml Energy Grid Region
+
+!include energy-grid-common.puml
+
+' Location is used to define the absolute position of an assets
+entity Location {
+    locationName: string /' location Name '/
+    xPosition: double /' X axis position. '/
+    yPosition: double /' Y axis position. '/
+    zPosition: double /' (if applicable) Z axis position. '/
+}
+
+' A subset of a geographical region of a power system network model.
+entity SubGeographicalRegion extends IdentifiedObject, Location {
+}
+
+' A geographical region of a power system network model.
+entity GeographicalRegion extends IdentifiedObject, Location {
+}
+
+SubGeographicalRegion --> GeographicalRegion : withIn /' The geographical region which this sub-geographical region is within. '/
+
+@enduml

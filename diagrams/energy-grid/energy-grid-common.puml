@@ -1,6 +1,5 @@
 @startuml Energy Grid Common
 
-
 ' This is a root class to provide common identification for all classes needing identification and naming attributes.
 entity IdentifiedObject {
     description: string /' The description is a free human readable text describing or naming the object. It may be non unique and may not correlate to a naming hierarchy. '/
@@ -9,55 +8,5 @@ entity IdentifiedObject {
     energyIdentCodeEic: string /' The attribute is used for an exchange of the EIC code (Energy identification Code). The length of the string is 16 characters as defined by the EIC code. For details on EIC scheme please refer to ENTSO-E web site. '/
     shortName: string /' The attribute is used for an exchange of a human readable short name with length of the string 12 characters maximum. '/
 }
-
-' A power system resource (PSR) can be an item of equipment such as a switch, an equipment container containing many individual items of equipment such as a substation, or an organisational entity such as sub-control area. Power system resources can have measurements associated.
-entity PowerSystemResource extends IdentifiedObject {
-}
-
-' Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
-entity ConnectivityNode extends IdentifiedObject {
-    TerminalCount: int /' The connectivity node to which this terminal connects with zero impedance. This propoerty to defined total number of terminals connected to a node. '/
-    -- BoundaryPoint --> BoundaryPoint /' The boundary point associated with this connectivity node. '/
-    ' ConnectivityNodeContainer --> ConnectivityNodeContainer /' Container of this connectivity node. '/ 
-}
-
-' A base class for all objects that may contain connectivity nodes or topological nodes.
-entity ConnectivityNodeContainer extends PowerSystemResource  {
-    ' connectivityNodes --> ConnectivityNode /' Connectivity nodes contained in this container. '/
-}
-
-' The parts of a power system that are physical devices, electronic or mechanical.
-entity Equipment extends PowerSystemResource {
-    aggregate: float /' The aggregate flag provides an alternative way of representing an aggregated (equivalent) element. It is applicable in cases when the dedicated classes for equivalent equipment do not have all of the attributes necessary to represent the required level of detail.  In case the flag is set to “true” the single instance of equipment represents multiple pieces of equipment that have been modelled together as an aggregate equivalent obtained by a network reduction procedure. Examples would be power transformers '/
-    normallyInService: float /' Specifies the availability of the equipment under normal operating conditions. True means the equipment is available for topology processing, which determines if the equipment is energized or not. False means that the equipment is treated by network applications as if it is not in the model. '/
-    ' EquipmentContainer --> EquipmentContainer /' Container of this equipment. '/
-    -- OperationalLimitSet --> OperationalLimitSet /' The operational limit sets associated with this equipment. '/
-}
-
-' A modelling construct to provide a root class for containing equipment.
-entity EquipmentContainer extends ConnectivityNodeContainer {
-    ' Equipments --> Equipment /' Contained equipment. '/
-}
-
-
-' Defines a system base voltage which is referenced.
-entity BaseVoltage extends IdentifiedObject {
-    nominalVoltage: float /' The power system resource's base voltage. Shall be a positive value and not zero. '/
-}
-
-' The parts of the AC power system that are designed to carry current or that are conductively connected through terminals.
-entity ConductingEquipment extends Equipment {
-}
-
-' EquipmentContainer "Equipments" <--> "EquipmentContainer" Equipment : contains /' Contained equipment. '/
-Equipment --> EquipmentContainer : EquipmentContainer /' Container of this equipment. '/
-
-EquipmentContainer --> Equipment : Equipments /' Contained equipment. '/
-
-ConnectivityNodeContainer --> ConnectivityNode : connectivityNodes /' Connectivity nodes contained in this container. '/
-
-ConnectivityNode --> ConnectivityNodeContainer : ConnectivityNodeContainer /' Container of this connectivity node. '/ 
-
-ConductingEquipment --> BaseVoltage : BaseVoltage /' Base voltage of this conducting equipment. Use only when there is no voltage level container used and only one base voltage applies. For example, not used for transformers. '/
 
 @enduml
