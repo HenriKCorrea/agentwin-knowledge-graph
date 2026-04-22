@@ -16,40 +16,39 @@ enum AMIBillingReady {
 entity ElectricVehicle {
     evName: string /' The name of the electric vehicle. '/
     capacity: double /' Total EV battery capacity. '/
-    chargeMin: double /' Minimum charge limit. '/
+    ' chargeMin: double /' Minimum charge limit. '/
     chargeRateMin: double /' Minimum charging rate. '/
     chargeRateMax: double /' Maximum charging rate. '/
-    dischargeRateMin: double /' Minimum discharge rate. '/
-    dischargeRateMax: double /' Maximum discharge rate. '/
+    ' dischargeRateMin: double /' Minimum discharge rate. '/
+    ' dischargeRateMax: double /' Maximum discharge rate. '/
     chargeTarget: double /' Target capacity to be charged '/
     chargeTargetTimestamp: dateTime /' Target end datetime to be charged '/
-    -- connectedTo_ChargingStation --> EVChargingStation /' EV --> ChargingStation '/
+    ' -- connectedTo_ChargingStation --> EVChargingStation /' EV --> ChargingStation '/
 }
 
 ' Logical or physical point in the network to which readings or events may be attributed. Used at the place where a physical or virtual meter may be located; however, it is not required that a meter be present.
 entity UsagePoint {
     amiBillingReady: AMIBillingReady /' Tracks the lifecycle of the metering installation at a usage point with respect to readiness for billing via advanced metering infrastructure reads. '/
-    checkBilling: boolean /' True if as a result of an inspection or otherwise, there is a reason to suspect that a previous billing may have been performed with erroneous data. Value should be reset once this potential discrepancy has been resolved. '/
-    connectionCategory: string /' A code used to specify the connection category, e.g., low voltage or low pressure, where the usage point is defined. '/
+    ' checkBilling: boolean /' True if as a result of an inspection or otherwise, there is a reason to suspect that a previous billing may have been performed with erroneous data. Value should be reset once this potential discrepancy has been resolved. '/
+    ' connectionCategory: string /' A code used to specify the connection category, e.g., low voltage or low pressure, where the usage point is defined. '/
     connectionState: string /' State of the usage point with respect to connection to the network. '/
-    disconnectionMethod: string /' Is an indication of how the usage point is physically connected or disconnected. '/
+    ' disconnectionMethod: string /' Is an indication of how the usage point is physically connected or disconnected. '/
     estimatedLoad: float /' Estimated load (current flow). '/
-    grounded: boolean /' True if grounded. '/
-    isSdp: boolean /' If true, this usage point is a service delivery point, i.e., a usage point where the ownership of the service changes hands. '/
-    isVirtual: boolean /' If true, this usage point is virtual, i.e., no physical location exists in the network where a meter could be located to collect the meter readings. '/
-    minimalUsageExpected: boolean /' If true, minimal or zero usage is expected at this usage point for situations such as premises vacancy, logical or physical disconnect. '/
-    nominalServiceVoltage: float /' Nominal service voltage. '/
-    outageRegion: string /' Outage region in which this usage point is located. '/
-    phaseCode: string /' Phase code. Number of wires and specific nominal phases can be deduced from enumeration literal values. '/
-    phaseCount: integer /' Number of potential phases the Usage Point supports, typically 0, 1 or 3. '/
+    ' grounded: boolean /' True if grounded. '/
+    ' isSdp: boolean /' If true, this usage point is a service delivery point, i.e., a usage point where the ownership of the service changes hands. '/
+    ' isVirtual: boolean /' If true, this usage point is virtual, i.e., no physical location exists in the network where a meter could be located to collect the meter readings. '/
+    ' minimalUsageExpected: boolean /' If true, minimal or zero usage is expected at this usage point for situations such as premises vacancy, logical or physical disconnect. '/
+    ' nominalServiceVoltage: float /' Nominal service voltage. '/
+    ' outageRegion: string /' Outage region in which this usage point is located. '/
+    ' phaseCode: string /' Phase code. Number of wires and specific nominal phases can be deduced from enumeration literal values. '/
+    ' phaseCount: integer /' Number of potential phases the Usage Point supports, typically 0, 1 or 3. '/
     physicalConnectionCapacity: float /' Quantitative information about the maximum physical capacity of the connection for the usage point. '/
     ratedCurrent: float /' Current flow that this usage point is configured to deliver. '/
     ratedPower: float /' Active power that this usage point is configured to deliver. '/
-    readCycle: string /' Cycle day on which the meter for this usage point will normally be read.  Usually correlated with the billing cycle. '/
-    readRoute: string /' Identifier of the route to which this usage point is assigned for purposes of meter reading. Typically used to configure hand held meter reading systems prior to collection of reads. '/
-    serviceDeliveryRemark: string /' Remarks about this usage point, for example the reason for it being rated with a non-nominal priority. '/
-    servicePriority: string /' Priority of service for this usage point. Note that usage points at the same service location can have different priorities. '/
-    ' relatedEquipment --> Equipment /' connection to an equipment. '/
+    ' readCycle: string /' Cycle day on which the meter for this usage point will normally be read.  Usually correlated with the billing cycle. '/
+    ' readRoute: string /' Identifier of the route to which this usage point is assigned for purposes of meter reading. Typically used to configure hand held meter reading systems prior to collection of reads. '/
+    ' serviceDeliveryRemark: string /' Remarks about this usage point, for example the reason for it being rated with a non-nominal priority. '/
+    ' servicePriority: string /' Priority of service for this usage point. Note that usage points at the same service location can have different priorities. '/
 }
 
 
