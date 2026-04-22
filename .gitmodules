@@ -4,3 +4,6 @@
 [submodule "opendigitaltwins-energygrid"]
 	path = opendigitaltwins-energygrid
 	url = https://github.com/Azure/opendigitaltwins-energygrid.git
+[submodule "pep"]
+	path = pep
+	url = https://github.com/henrikcorrea/pep
