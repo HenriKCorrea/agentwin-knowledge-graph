@@ -1,0 +1,29 @@
+@startuml Energy Grid Usage Point
+
+' NOTE: EVChargingStation is referenced here for cross-domain linkage,
+' but it is not defined in the Energy Grid ontology. It belongs to the Smart City ontology.
+entity EVChargingStation {
+}
+
+' Adapted from CIM and https://github.com/smart-data-models/dataModel.EnergyCIM/ data models: an electric vehicle model
+entity ElectricVehicle {
+    evName: string /' The name of the electric vehicle. '/
+    capacity: double /' Total EV battery capacity. '/
+    ' chargeMin: double /' Minimum charge limit. '/
+    chargeRateMin: double /' Minimum charging rate. '/
+    chargeRateMax: double /' Maximum charging rate. '/
+    ' dischargeRateMin: double /' Minimum discharge rate. '/
+    ' dischargeRateMax: double /' Maximum discharge rate. '/
+    chargeTarget: double /' Target capacity to be charged '/
+    chargeTargetTimestamp: dateTime /' Target end datetime to be charged '/
+    ' -- connectedTo_ChargingStation --> EVChargingStation /' EV --> ChargingStation '/
+}
+
+ElectricVehicle --> EVChargingStation : connectedTo_ChargingStation /' EV --> ChargingStation '/
+
+note right of EVChargingStation
+Not defined in Energy Grid;
+belongs to Smart City ontology.
+end note
+
+@enduml
