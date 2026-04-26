@@ -13,7 +13,15 @@
 ' }
 
 ' Logical or physical point in the network to which readings or events may be attributed. Used at the place where a physical or virtual meter may be located; however, it is not required that a meter be present.
-entity UsagePoint {
+'
+' <<key>> decision:
+' - **`UsagePoint`** — the supply side. It is the grid's representation of a physical connection point (a charging station socket from the grid's perspective). `ratedPower` is the capacity ceiling, `estimatedLoad` is current consumption (headroom = `ratedPower − estimatedLoad`), `connectionState` determines availability, and `ratedCurrent` maps to the station's amperage. This is the entity the agent queries to answer "can this station accept this EV right now?"
+'
+' <<bridge>> decision:
+' - **`UsagePoint`** — the native Energy Grid side of the EVChargingStation ↔ UsagePoint semantic gap. The grid has no concept of a
+'   "charging station"; it only sees a UsagePoint at which load appears. Bridging this correspondence is the central semantic
+'   challenge the agent must solve when coordinating across the Smart City and Energy Grid ontologies.
+entity UsagePoint <<key>> <<bridge>> {
     ' amiBillingReady: AMIBillingReady /' Tracks the lifecycle of the metering installation at a usage point with respect to readiness for billing via advanced metering infrastructure reads. '/
     ' checkBilling: boolean /' True if as a result of an inspection or otherwise, there is a reason to suspect that a previous billing may have been performed with erroneous data. Value should be reset once this potential discrepancy has been resolved. '/
     ' connectionCategory: string /' A code used to specify the connection category, e.g., low voltage or low pressure, where the usage point is defined. '/

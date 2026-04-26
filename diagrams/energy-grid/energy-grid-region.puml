@@ -4,7 +4,13 @@
 
 ' Location is used to define the absolute position of an assets
 ' The place, scene, or point of something where someone or something has been, is, and/or will be at a given moment in time.
-entity Location {
+'
+' <<bridge>> decision:
+' - **`Location`** — the Energy Grid side of the Location ↔ GeoLocation semantic gap. CIM models position as scalar
+'   Cartesian coordinates (xPosition/yPosition), while the Smart City ontology uses GeoJSON-typed geometry
+'   (type: GeoType, coordinates: string). The agent must negotiate this coordinate system mismatch when
+'   correlating grid assets (e.g., Substation zones) with Smart City geographic entities.
+entity Location <<bridge>> <<context>> {
     locationName: string /' location Name '/
     xPosition: double /' X axis position. '/
     yPosition: double /' Y axis position. '/
@@ -12,7 +18,7 @@ entity Location {
 }
 
 ' A subset of a geographical region of a power system network model.
-entity SubGeographicalRegion extends IdentifiedObject, Location {
+entity SubGeographicalRegion <<context>> extends IdentifiedObject, Location {
 }
 
 ' A geographical region of a power system network model.

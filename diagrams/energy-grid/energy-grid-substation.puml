@@ -16,7 +16,10 @@
 ' A power transformer may be composed of separate transformer tanks that need not be identical.
 ' A power transformer can be modelled with or without tanks and is intended for use in both balanced and unbalanced representations.
 ' A power transformer typically has two terminals.
-entity PowerTransformer extends ConductingEquipment {
+'
+' <<key>> decision:
+' - **`PowerTransformer`** — the overload risk node. The entire scenario motivation is preventing transformer overloads. It is the aggregation point where all `UsagePoint` loads sum up, and the entity whose capacity constraint (`PowerTransformerEnd.ratedS`) must not be breached.
+entity PowerTransformer <<key>> extends ConductingEquipment {
     Name: string /' Power transformer name. For example, SAMWA0001 '/
     ' PowerTransformerEnd: double /' The power transformer of this power transformer end. WARNING: This attribute is an inconsistency. Probably copy and paste error. '/
     ' beforeShCircuitHighestOperatingCurrent: double /' The highest operating current (Ib in the IEC 60909-0) before short circuit (depends on network configuration and relevant reliability philosophy). It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. Default: 0.0 '/
@@ -33,7 +36,10 @@ entity PowerTransformer extends ConductingEquipment {
 ' PowerTransformerEnd has non zero values on r, r0, x, and x0 while the low voltage (TransformerEnd.endNumber=2)
 ' PowerTransformerEnd has zero values for r, r0, x, and x0.
 ' Parameters are always provided, even if the PowerTransformerEnds have the same values.
-entity PowerTransformerEnd {
+'
+' <<key>> decision:
+' - **`PowerTransformerEnd`** — holds `ratedS`, the actual numeric capacity of the transformer in MVA. Without it, `PowerTransformer` is just a name — `ratedS` is the hard constraint the agent enforces when checking whether adding a new EV charging session would push the transformer past 95%.
+entity PowerTransformerEnd <<key>> {
     ' b: float /' Magnetizing branch susceptance (B mag).  The value can be positive or negative. '/
     ' g: float /' Magnetizing branch conductance. '/
     ' r: float /' Resistance (star-model) of the transformer end. The attribute shall be equal to or greater than zero for non-equivalent transformers. '/
@@ -45,7 +51,7 @@ entity PowerTransformerEnd {
 }
 
 ' A collection of equipment for purposes other than generation or utilization, through which electric energy in bulk is passed for the purposes of switching or modifying its characteristics.
-entity Substation extends EquipmentContainer {
+entity Substation <<context>> extends EquipmentContainer {
     substationName: string /' The name of the substation. '/
     ' substationType: SubstationType /' The type of substations. '/
     ' dcConverterUnit --> DCConverterUnit /' The DC converter unit belonging of the substation. '/

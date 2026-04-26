@@ -6,7 +6,13 @@
 ' According to IEC 61968-13, a LV customer is an EquivalentLoad.
 ' An EquivalentLoad has the attribute customerCount having its value greater than one to indicate the number of customers attached.
 ' The voltage level is specified by a voltage level that contains this EquivalentLoad.
-entity EquivalentLoad {
+'
+' <<key>> decision:
+' - **`EquivalentLoad`** — LV background load (aggregated residential consumers) contributing to transformer stress. Its `p` (active power)
+'   represents the baseline residential demand already present before EV charging begins. Together with CustomerLoad.p and
+'   UsagePoint.estimatedLoad, it forms the total load the agent must compare against PowerTransformerEnd.ratedS to
+'   determine whether a new EV charging session can be safely accommodated without breaching the 95% capacity threshold.
+entity EquivalentLoad <<key>> {
     eqLoadName: string /' The name of the equivalent load. '/
     p: float /' Active power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
     ' pfixed: float /' Active power of the load that is a fixed quantity. Load sign convention is used, i.e. positive sign means flow out from a node. Default: 0.0 '/

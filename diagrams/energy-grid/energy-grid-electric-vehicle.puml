@@ -8,14 +8,17 @@
 
 ' NOTE: EVChargingStation is referenced here for cross-domain linkage,
 ' but it is not defined in the Energy Grid ontology. It belongs to the Smart City ontology.
-entity EVChargingStation {
+entity EVChargingStation <<bridge>> {
 }
 
 ' Adapted from CIM and https://github.com/smart-data-models/dataModel.EnergyCIM/ data models: an electric vehicle model
 ' An electric vehicle (EV) is a vehicle that uses one or more electric motors or traction motors for propulsion.
 ' An electric vehicle may be powered through a collector system by electricity from off-vehicle sources,
 ' or may be self-contained with a battery, solar panels, fuel cells or an electric generator to convert fuel to electricity.
-entity ElectricVehicle {
+'
+' <<key>> decision:
+' - **`ElectricVehicle`** — the demand side of the problem. Its `chargeRateMax` sets the upper bound on which station power levels are compatible, `chargeTarget` quantifies how much energy is needed, and `chargeTargetTimestamp` establishes urgency. Without these, no assignment decision can be made.
+entity ElectricVehicle <<key>> {
     evName: string /' The name of the electric vehicle. '/
     capacity: double /' Total EV battery capacity. '/
     ' chargeMin: double /' Minimum charge limit. '/
