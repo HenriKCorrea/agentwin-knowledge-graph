@@ -61,7 +61,7 @@ enum GeoType {
     MultiPolygon
 }
 
-class Address {
+class Address <<abstract>> {
     addressCountry: string
     addressLocality: string
     addressRegion: string
@@ -70,12 +70,17 @@ class Address {
     streetAddress: string
 }
 
-class GeoLocation {
+' <<bridge>> decision:
+' - **`GeoLocation`** — the Smart City side of the GeoLocation ↔ Location semantic gap. Uses GeoJSON-typed geometry
+'   (type: GeoType, coordinates: string) as opposed to the Energy Grid CIM scalar Cartesian model
+'   (xPosition/yPosition). The agent must negotiate this coordinate system mismatch when correlating
+'   Smart City geographic entities with grid asset zones (e.g., SubGeographicalRegion → Substation).
+class GeoLocation <<bridge>> {
     type: GeoType
     coordinates: string /' Depends on the type of the location. '/
 }
 
-class NGSILDBaseModel {
+class NGSILDBaseModel <<abstract>> {
     ' dataProvider: string
     dateModified: dateTime
     ' dateCreated: dateTime
@@ -90,30 +95,41 @@ class NGSILDBaseModel {
 }
 
 ' Spatial-object represents everything that can have a spatial representation. It is superclass of feature and geometry. GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
-class SpatialObject {
+class SpatialObject <<abstract>> {
     
 }
 
 ' The class represents the top-level geometry type. This class is equivalent to the UML class GM_Object defined in ISO 19107, and it is superclass of all geometry types. GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
-class Geometry extends SpatialObject {
+class Geometry <<abstract>> extends SpatialObject {
 
 }
 
 ' This class represents the top-level feature type. This class is equivalent to GFI_Feature defined in ISO 19156:2011, and it is superclass of all feature types. GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
-class Feature extends SpatialObject {
+class Feature <<abstract>> extends SpatialObject {
 
 }
 
 ' Generic class for describing city objects.
-class CityObject extends Feature {
+class CityObject <<abstract>> extends Feature {
 
 }
 
-class CityFurniture extends CityObject {
+class CityFurniture <<abstract>> extends CityObject {
 
 }
 
-entity EVChargingStation extends NGSILDBaseModel {
+' <<key>> decision:
+' - **`EVChargingStation`** — the supply side from the Smart City perspective. `capacity` is the total number of vehicles
+'   that can charge simultaneously, `availableCapacity` is current availability, `status` maps to UsagePoint.connectionState,
+'   and `amperage` maps to UsagePoint.ratedCurrent. This is the entity the Smart City agent queries to answer
+'   "which stations are available and what power level do they offer?"
+'
+' <<bridge>> decision:
+' - **`EVChargingStation`** — the Smart City side of the EVChargingStation ↔ UsagePoint semantic gap. The Smart City models
+'   the charging station as physical infrastructure with availability counts and status enums, while the Energy Grid models
+'   the same socket as a logical UsagePoint with power metrics. Bridging this correspondence is the central semantic
+'   challenge the agent must solve.
+entity EVChargingStation <<key>> <<bridge>> extends NGSILDBaseModel {
     capacity: int /' The total number of vehicles which can be charged at the same time. The total number of sockets can be higher. '/
     ' socketNumber: int /' The total number of sockets offered by this charging station. '/ 
     availableCapacity: int /' The number of vehicles which currently can be charged. '/
@@ -130,7 +146,30 @@ entity EVChargingStation extends NGSILDBaseModel {
     ' acceptedPaymentMethod: enum {ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm} /' Type(s) of charge when using this station. Model:'https://schema.org/Text'. Enum:'ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm' '/
 }
 
-entity Pole extends CityFurniture {
+entity Pole <<context>> extends CityFurniture {
+}
+
+' A parking lot with off-street access. Contains EV charging stations and parking spots.
+' <<context>> decision:
+' - **`OffStreetParking`** — structural anchor linking EVChargingStation to a geographic zone (via NGSILDBaseModel.location).
+'   `availableSpotNumber` provides the parking availability the scenario requires ("parking availability" in methodology.tex).
+'   The agent uses this to determine if an EV can physically park before assigning it to a charging station.
+entity OffStreetParking <<context>> extends NGSILDBaseModel {
+    availableSpotNumber: int /' The number of parking spots available in this parking site. '/
+    totalSpotNumber: int /' The total number of spots offered by this parking site. '/
+    ' openingHours: string
+    ' facilities: enum {electricChargingStation, ...} /' Available amenities including EV charging. '/
+}
+
+' An atomic parking space / spot.
+' <<context>> decision:
+' - **`ParkingSpot`** — individual spot occupancy status; allows the agent to determine whether a specific
+'   parking space adjacent to a charging station is free before completing an EV assignment.
+entity ParkingSpot <<context>> extends NGSILDBaseModel {
+    status: string /' Allowed values: occupied, free, closed. '/
+    ' category: enum {offStreet, onStreet}
+    ' width: double
+    ' length: double
 }
 
 SpatialObject --> SpatialObject : Contains
@@ -142,5 +181,9 @@ NGSILDBaseModel *-- GeoLocation : location
 NGSILDBaseModel *-- Address : address
 
 Pole --> EVChargingStation : refEVChargingStation
+
+EVChargingStation --> OffStreetParking : refOffStreetParking /' The off-street parking site this charging station belongs to. '/
+
+OffStreetParking --> ParkingSpot : refParkingSpot /' Individual parking spots in this facility. '/
 
 @enduml
