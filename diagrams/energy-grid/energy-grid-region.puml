@@ -3,6 +3,7 @@
 !include energy-grid-common.puml
 
 ' Location is used to define the absolute position of an assets
+' The place, scene, or point of something where someone or something has been, is, and/or will be at a given moment in time.
 entity Location {
     locationName: string /' location Name '/
     xPosition: double /' X axis position. '/

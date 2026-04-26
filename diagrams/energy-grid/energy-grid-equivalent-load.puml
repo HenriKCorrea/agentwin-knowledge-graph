@@ -1,5 +1,21 @@
-@startuml
+@startuml Energy Grid Equivalent Load
 
-' TODO!
+!include energy-grid-equipment.puml
+
+' According to IEC 61970-301, an EnergyConsumer is a generic user of energy - a  point of consumption on the power system model.
+' According to IEC 61968-13, a LV customer is an EquivalentLoad.
+' An EquivalentLoad has the attribute customerCount having its value greater than one to indicate the number of customers attached.
+' The voltage level is specified by a voltage level that contains this EquivalentLoad.
+entity EquivalentLoad {
+    eqLoadName: string /' The name of the equivalent load. '/
+    p: float /' Active power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' pfixed: float /' Active power of the load that is a fixed quantity. Load sign convention is used, i.e. positive sign means flow out from a node. Default: 0.0 '/
+    ' q: float /' Reactive power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' qfixed: float /' Reactive power of the load that is a fixed quantity. Load sign convention is used, i.e. positive sign means flow out from a node. Default: 0.0 '/
+    ' powerFactor: float /' the power factor value '/
+    ' customerCount: integer /' the attribute that indicate the number of customers attached '/
+}
+
+EquivalentLoad --> EquipmentContainer : memberOf_EquipmentContainer /' A EquivalentLoad --> EquipmentContainer --> Substation '/
 
 @enduml

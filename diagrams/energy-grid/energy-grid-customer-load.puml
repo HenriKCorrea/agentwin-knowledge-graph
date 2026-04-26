@@ -1,5 +1,27 @@
-@startuml
+@startuml Energy Grid Customer Load
 
-' TODO!
+!include energy-grid-substation.puml
+
+' A collection of equipment at one common system voltage forming a switchgear.
+' The equipment typically consists of breakers, busbars, instrumentation, control, regulation and protection devices as well as assemblies of all these.
+entity VoltageLevel extends EquipmentContainer {
+    ' highVoltageLimit: float /' The bus bar's high voltage limit.\nThe limit applies to all equipment and nodes contained in a given VoltageLevel. It is not required that it is exchanged in pair with lowVoltageLimit. It is preferable to use operational VoltageLimit, which prevails, if present. '/
+    ' lowVoltageLimit: float /' The bus bar's low voltage limit.\nThe limit applies to all equipment and nodes contained in a given VoltageLevel. It is not required that it is exchanged in pair with highVoltageLimit. It is preferable to use operational VoltageLimit, which prevails, if present. '/
+}
+
+' An EnergyConsumer is a generic user of energy - a  point of consumption on the power system model. 
+' According to IEC 61968-13, a MV  customer is a **CustomerLoad** and a LV customer is an **EquivalentLoad**.
+entity CustomerLoad {
+    customerLoadName: string /' The name of the customer load. '/
+    p: float /' Active power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' pfixed: float /' Active power of the load that is a fixed quantity. Load sign convention is used, i.e. positive sign means flow out from a node. Default: 0.0 '/
+    ' q: float /' Reactive power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' qfixed: float /' Reactive power of the load that is a fixed quantity. Load sign convention is used, i.e. positive sign means flow out from a node. Default: 0.0 '/
+    ' powerFactor: float /' the power factor value '/
+}
+
+VoltageLevel --> Substation : MemberOf_Substation /' Shows a relationship to a substation '/
+
+CustomerLoad --> VoltageLevel : MemberOf_EquipmentContainerVL /' A CustomerLoad can be assciated to an equipment container via the same voltage level. '/
 
 @enduml
