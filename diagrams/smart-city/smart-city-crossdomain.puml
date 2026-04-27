@@ -1,0 +1,30 @@
+@startuml Smart City Cross-Domain
+
+!include smart-city-topology.puml
+
+' entity Address <<context>> {
+'     ' addressCountry: string
+'     addressLocality: string
+'     addressRegion: string
+'     ' postOfficeBoxNumber: string
+'     ' postalCode: string
+'     ' streetAddress: string
+' }
+
+entity NGSILDBaseModel <<abstract>> {
+    ' dataProvider: string
+    ' dateModified: dateTime
+    ' dateCreated: dateTime
+    ' source: string
+    ' alternateName: string
+    ' name: string
+    ' description: string
+    ' owner: string
+    ' seeAlso: string
+}
+
+NGSILDBaseModel *-- GeoLocation : location
+
+' NGSILDBaseModel *-- Address : address
+
+@enduml

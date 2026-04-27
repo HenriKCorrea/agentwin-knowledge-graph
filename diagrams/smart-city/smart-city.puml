@@ -1,0 +1,41 @@
+@startuml Smart City
+
+' | Stereotype | Meaning |
+' |---|---|
+' | `<<key>>` | Entities that are **directly read or compared** during the coordination decision — the agent must retrieve and reason about their properties to assign an EV to a charging slot |
+' | `<<bridge>>` | The **cross-domain gap marker** — an entity that exists in one ontology but whose counterpart lives in the other; the semantic mapping the agent must negotiate |
+' | `<<context>>` | Entities that provide **structural topology** — necessary to traverse the graph and locate the key entities, but not themselves decision variables |
+' | `<<abstract>>` | **Base classes** from the CIM hierarchy — present only to satisfy inheritance chains; carry no scenario-specific semantics |
+
+<style>
+ClassDiagram {
+    .key {
+        BackgroundColor #FFF3CD
+        LineColor       #FFC107
+        FontStyle       bold
+    }
+    .context {
+        BackgroundColor #D6EAF8
+        LineColor       #2E86C1
+    }
+    .abstract {
+        BackgroundColor #F5F5F5
+        LineColor       #AAAAAA
+        FontColor       #888888
+    }
+    .bridge {
+        BackgroundColor #FDDDE6
+        LineColor       #E91E63
+        FontStyle       bold
+    }
+    .abstract {
+        BackgroundColor #F5F5F5
+        LineColor       #AAAAAA
+        FontColor       #888888
+    }
+}
+</style>
+
+!include smart-city-ev.puml
+
+@enduml

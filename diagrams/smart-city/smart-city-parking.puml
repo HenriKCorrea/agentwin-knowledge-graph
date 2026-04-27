@@ -1,0 +1,199 @@
+' @startuml Smart City Parking
+
+' !include smart-city-crossdomain.puml
+
+' ' enum OffStreetParkingFacilities {
+' '     bikeParking
+' '     cashMachine
+' '     copyMachineOrService
+' '     defibrillator
+' '     dumpingStation
+' '     electricChargingStation
+' '     elevator
+' '     faxMachineOrService
+' '     fireHose
+' '     fireExtinguisher
+' '     fireHydrant
+' '     firstAidEquipment
+' '     freshWater
+' '     iceFreeScaffold
+' '     informationPoint
+' '     internetWireless
+' '     luggageLocker
+' '     payDesk
+' '     paymentMachine
+' '     playground
+' '     publicPhone
+' '     refuseBin
+' '     safeDeposit
+' '     shower
+' '     toilet
+' '     tollTerminal
+' '     vendingMachine
+' '     wasteDisposal
+' ' }
+
+' ' enum OffStreetParkingLayout {
+' '     automatedParkingGarage
+' '     carports
+' '     covered
+' '     field
+' '     garageBoxes
+' '     multiLevel
+' '     multiStorey
+' '     nested
+' '     openSpace
+' '     rooftop
+' '     sheds
+' '     singleLevel
+' '     surface
+' '     other
+' ' }
+
+' ' enum OffStreetParkingUsageScenario {
+' '     automaticParkingGuidance
+' '     carSharing
+' '     dropOffWithValet
+' '     dropOffMechanical
+' '     dropOff
+' '     eventParking
+' '     kissAndRide
+' '     liftShare
+' '     loadingBay
+' '     overnightParking
+' '     parkAndCycle
+' '     parkAndRide
+' '     parkAndWalk
+' '     restArea
+' '     serviceArea
+' '     staffGuidesToSpace
+' '     truckParking
+' '     vehicleLift
+' '     other
+' ' }
+
+' ' enum OffStreetParkingSecurity {
+' '     areaSeparatedFromSurroundings
+' '     cctv
+' '     dog
+' '     externalSecurity
+' '     fences
+' '     floodLight
+' '     guard24hours
+' '     lighting
+' '     patrolled
+' '     securityStaff
+' ' }
+
+' ' enum OffStreetParkingSpecialLocation {
+' '     airportTerminal
+' '     cableCarStation
+' '     campground
+' '     cinema
+' '     coachStation
+' '     conventionCentre
+' '     exhibitionCentre
+' '     ferryTerminal
+' '     hotel
+' '     market
+' '     publicTransportStation
+' '     religiousCentre
+' '     shoppingCentre
+' '     skilift
+' '     specificFacility
+' '     themePark
+' '     trainStation
+' '     vehicleOnRailTerminal
+' '     other
+' ' }
+
+' enum OffStreetParkingStatus {
+'     full
+'     almostFull
+'     fullAtEntrance
+'     spacesAvailable
+'     open
+'     openingTimesInForce
+'     closed
+'     closedAbnormal
+' }
+
+' ' enum ParkingSpotCategory {
+' '     offStreet
+' '     onStreet
+' ' }
+
+' ' enum ParkingSpotStatus {
+' '     occupied
+' '     free
+' '     closed
+' '     unkown
+' ' }
+
+' entity OffStreetParking <<context>> extends NGSILDBaseModel {
+'     ' accessModified: dateTime
+'     ' aggregateRating: double
+'     ' highestFloor: integer
+'     ' images: string
+'     ' lowestFloor: integer
+'     ' openingHours: string
+'     ' priceCurrency: string
+'     ' priceRatePerMinute: double
+'     ' provider: string
+'     ' facilities: OffStreetParkingFacilities
+'     ' layout: OffStreetParkingLayout
+'     ' usageScenario: OffStreetParkingUsageScenario
+'     ' security: OffStreetParkingSecurity
+'     ' specialLocation: OffStreetParkingSpecialLocation
+'     ' category: string
+'     ' extCategory: string
+'     ' firstAvailableFloor: integer
+'     ' measuresPeriod: double
+'     ' measuresPeriodUnit: string
+'     ' occupancy: double
+'     ' occupancyModified: double
+'     occupiedSpotNumber: integer
+'     ' vehicleEntranceCount: integer
+'     ' vehicleExitCount: integer
+'     status: OffStreetParkingStatus
+' }
+
+' ' entity ParkingSpot <<context>> extends NGSILDBaseModel {
+' '     dateObserved: double
+' '     width: double
+' '     length: double
+' '     timeInstant: dateTime
+' '     image: string
+' '     color: string
+' '     category: ParkingSpotCategory
+' '     status: ParkingSpotStatus
+' ' }
+
+' ' OffstreetParking *-- ContactPoint : contactPoint
+' ' OffstreetParking *-- AverageSpotLength : averageSpotLength
+' ' OffstreetParking *-- AverageSpotWidth : averageSpotWidth
+' ' OffstreetParking *-- MaximumAllowedHeight : maximumAllowedHeight
+' ' OffstreetParking *-- MaximumAllowedWidth : maximumAllowedWidth
+' ' OffstreetParking *-- MaximumParkingDuration : maximumParkingDuration
+' ' OffstreetParking *-- OccupancyDetectionType : occupancyDetectionType
+' ' OffstreetParking *-- ParkingMode : parkingMode
+' ' OffstreetParking *-- ReservationType : reservationType
+' ' OffstreetParking *-- AcceptedPaymentMethod : acceptedPaymentMethod
+' ' OffstreetParking *-- AllowedVehicleType : allowedVehicleType
+' ' OffstreetParking *-- AreaServed : areaServed
+' ' OffstreetParking *-- ChargeType : chargeType
+' ' OffstreetParking *-- ExtraSpotNumber : extraSpotNumber
+' ' OffstreetParking *-- RequiredPermit : requiredPermit
+' ' OffstreetParking *-- TotalSpotNumber : totalSpotNumber
+
+' ' OffstreetParking --> ParkingGroup : refParkingGroup
+' ' OffStreetParking --> ParkingSpot : refParkingSpot
+
+' ' ParkingSpot *-- AreaServed : areaServed
+
+' ' ParkingSpot --> ParkingGroup : refParkingGroup
+' ' ParkingSpot --> OnStreetParking : refOnStreetParking
+' ' ParkingSpot --> OffStreetParking : refOffStreetParking
+' ' ParkingSpot --> Device : refdevice
+
+' @enduml

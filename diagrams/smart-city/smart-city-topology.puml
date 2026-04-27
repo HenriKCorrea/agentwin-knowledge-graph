@@ -1,0 +1,46 @@
+@startuml Smart City Topology
+
+enum GeoType {
+    Point
+    LineString
+    Polygon
+    MultiPoint
+    MultiLineString
+    MultiPolygon
+}
+
+' <<bridge>> decision:
+' - **`GeoLocation`** — the Smart City side of the GeoLocation ↔ Location semantic gap. Uses GeoJSON-typed geometry
+'   (type: GeoType, coordinates: string) as opposed to the Energy Grid CIM scalar Cartesian model
+'   (xPosition/yPosition). The agent must negotiate this coordinate system mismatch when correlating
+'   Smart City geographic entities with grid asset zones (e.g., SubGeographicalRegion → Substation).
+entity GeoLocation <<bridge>> {
+    type: GeoType
+    coordinates: string /' Depends on the type of the location. '/
+}
+
+' ' Spatial-object represents everything that can have a spatial representation.
+' ' It is superclass of feature and geometry.
+' ' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+' entity SpatialObject <<abstract>> {
+' }
+
+' ' The class represents the top-level geometry type.
+' ' This class is equivalent to the UML class GM_Object defined in ISO 19107, and it is superclass of all geometry types.
+' ' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+' entity Geometry <<abstract>> extends SpatialObject {
+' }
+
+' ' This class represents the top-level feature type.
+' ' This class is equivalent to GFI_Feature defined in ISO 19156:2011, and it is superclass of all feature types.
+' ' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+' entity Feature <<abstract>> extends SpatialObject {
+' }
+
+' SpatialObject --> SpatialObject : Contains
+
+' SpatialObject --> SpatialObject : Within
+
+' Feature --> Geometry : hasGeometry
+
+@enduml
