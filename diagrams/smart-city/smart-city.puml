@@ -36,6 +36,7 @@ ClassDiagram {
 }
 </style>
 
-!include smart-city-ev.puml
+!include smart-city-object.puml
+!include smart-city-area.puml
 
 @enduml

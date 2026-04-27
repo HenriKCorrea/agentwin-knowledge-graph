@@ -19,28 +19,28 @@ entity GeoLocation <<bridge>> {
     coordinates: string /' Depends on the type of the location. '/
 }
 
-' ' Spatial-object represents everything that can have a spatial representation.
-' ' It is superclass of feature and geometry.
-' ' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
-' entity SpatialObject <<abstract>> {
-' }
+' Spatial-object represents everything that can have a spatial representation.
+' It is superclass of feature and geometry.
+' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+entity SpatialObject <<abstract>> {
+}
 
-' ' The class represents the top-level geometry type.
-' ' This class is equivalent to the UML class GM_Object defined in ISO 19107, and it is superclass of all geometry types.
-' ' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
-' entity Geometry <<abstract>> extends SpatialObject {
-' }
+' The class represents the top-level geometry type.
+' This class is equivalent to the UML class GM_Object defined in ISO 19107, and it is superclass of all geometry types.
+' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+entity Geometry <<abstract>> extends SpatialObject {
+}
 
-' ' This class represents the top-level feature type.
-' ' This class is equivalent to GFI_Feature defined in ISO 19156:2011, and it is superclass of all feature types.
-' ' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
-' entity Feature <<abstract>> extends SpatialObject {
-' }
+' This class represents the top-level feature type.
+' This class is equivalent to GFI_Feature defined in ISO 19156:2011, and it is superclass of all feature types.
+' GeoSPARQL 1.0 is an OGC Standard.Copyright (c) 2012 Open Geospatial Consortium.
+entity Feature <<abstract>> extends SpatialObject {
+}
 
-' SpatialObject --> SpatialObject : Contains
+SpatialObject --> SpatialObject : Contains
 
-' SpatialObject --> SpatialObject : Within
+SpatialObject --> SpatialObject : Within
 
-' Feature --> Geometry : hasGeometry
+Feature --> Geometry : hasGeometry
 
 @enduml

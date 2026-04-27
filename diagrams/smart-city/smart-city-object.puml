@@ -1,27 +1,27 @@
-' @startuml Smart City Object
+@startuml Smart City Object
 
-' !include smart-city-ev.puml
+!include smart-city-ev.puml
 
-' ' Generic class for describing city objects.
-' entity CityObject <<abstract>> extends Feature {
-' }
+' Generic class for describing city objects.
+entity CityObject <<abstract>> extends Feature {
+}
 
-' entity CityFurniture <<abstract>> extends CityObject {
-' }
+entity CityFurniture <<abstract>> extends CityObject {
+}
 
-' entity Pole <<context>> extends CityFurniture {
-' }
+entity Pole <<context>> extends CityFurniture {
+}
 
-' ' Pole --> Streetlight : refStreetlight
+' Pole --> Streetlight : refStreetlight
 
-' ' Pole --> AirQualityObserved : refAirQualityObserved
+' Pole --> AirQualityObserved : refAirQualityObserved
 
-' ' Pole --> NoiseLevelObserved : refNoiseLevel
+' Pole --> NoiseLevelObserved : refNoiseLevel
 
-' ' Pole --> WeatherObserved : refWeather
+' Pole --> WeatherObserved : refWeather
 
-' ' Pole --> CrowdFlowObserved : refCrowdFlow
+' Pole --> CrowdFlowObserved : refCrowdFlow
 
-' Pole --> EVChargingStation : refEVChargingStation
+Pole --> EVChargingStation : refEVChargingStation
 
-' @enduml
+@enduml

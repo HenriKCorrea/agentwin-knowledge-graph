@@ -1,35 +1,39 @@
-' {
-'     "@id": "dtmi:digitaltwins:s4city:city:AdministrativeArea;1",
-'     "@type": "Interface",
-'     "displayName": "Administrative Area",
-'     "extends": "dtmi:digitaltwins:GeoSPARQL:Feature;1",
-'     "description": "An administrative division, unit, entity, area or region, also referred to as a subnational entity, constituent unit, or country subdivision, is a portion of a country or other region delineated for the purpose of administration. (https://en.wikipedia.org/wiki/Administrative_division)",
-'     "contents": [
+@startuml Smart City Area
 
-'     ],
-'     "@context": "dtmi:dtdl:context;2"
-' }
+!include smart-city-topology.puml
 
-' {
-'     "@id": "dtmi:digitaltwins:s4city:city:District;1",
-'     "@type": "Interface",
-'     "displayName": "District",
-'     "extends": "dtmi:digitaltwins:s4city:city:AdministrativeArea;1",
-'     "description": "A district is a type of administrative division that, in some countries, is managed by local government. Across the world, areas known as 'districts' vary greatly in size, spanning regions or counties, several municipalities, subdivisions of municipalities, school district, or political district. (https://en.wikipedia.org/wiki/District)",
-'     "contents": [
+' An administrative division, unit, entity, area or region,
+' also referred to as a subnational entity, constituent unit, or country subdivision,
+' is a portion of a country or other region delineated for the purpose of administration.
+' (https://en.wikipedia.org/wiki/Administrative_division)
+entity AdministrativeArea <<abstract>> extends Feature {
+}
 
-'     ],
-'     "@context": "dtmi:dtdl:context;2"
-' }
+' A district is a type of administrative division that, in some countries, is managed by local government.
+' Across the world, areas known as 'districts' vary greatly in size, spanning regions
+' or counties, several municipalities, subdivisions of municipalities, school district, or political district.
+' (https://en.wikipedia.org/wiki/District)
+'
+' <<bridge>> decision:
+' - **`District`** — the Smart City side of the District ↔ SubGeographicalRegion semantic gap. A District is a
+'   civic/administrative zone defined by city governance, while SubGeographicalRegion is an electrical topology zone
+'   defined by grid infrastructure. Both partition the same physical city space but use entirely different boundaries
+'   and naming conventions. The agent must negotiate this mismatch — correlating a charging station's district
+'   membership with the SubGeographicalRegion (and its Substation) that provides its electrical supply.
+entity District <<bridge>> extends AdministrativeArea {
+}
 
-' {
-'     "@id": "dtmi:digitaltwins:s4city:city:Neighbourhood;1",
-'     "@type": "Interface",
-'     "displayName": "Neighbourhood",
-'     "extends": "dtmi:digitaltwins:s4city:city:AdministrativeArea;1",
-'     "description": "A neighbourhood (British English), or neighborhood (American English; see spelling differences), is a geographically localised community within a larger city, town, suburb or rural area. (https://en.wikipedia.org/wiki/Neighbourhood)",
-'     "contents": [
-        
-'     ],
-'     "@context": "dtmi:dtdl:context;2"
-' }
+' A neighbourhood (British English), or neighborhood (American English; see spelling differences),
+' is a geographically localised community within a larger city, town, suburb or rural area.
+' (https://en.wikipedia.org/wiki/Neighbourhood)
+'
+' <<bridge>> decision:
+' - **`Neighbourhood`** — finer-grained Smart City side of the same spatial gap as District. A Neighbourhood
+'   represents a sub-district community zone (e.g., a downtown block cluster), which may map more precisely to a
+'   single Substation service area than a full District does. When the agent resolves which transformer serves a
+'   charging station, Neighbourhood provides a more granular named anchor than District, reducing the spatial
+'   search to a smaller candidate set of UsagePoints and PowerTransformers.
+entity Neighbourhood <<bridge>> extends AdministrativeArea {
+}
+
+@enduml

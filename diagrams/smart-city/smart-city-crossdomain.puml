@@ -12,15 +12,15 @@
 ' }
 
 entity NGSILDBaseModel <<abstract>> {
-    ' dataProvider: string
+    ' dataProvider: string /' Specifies the URL to information about the provider of this information '/
     ' dateModified: dateTime
     ' dateCreated: dateTime
-    ' source: string
-    ' alternateName: string
-    ' name: string
-    ' description: string
+    ' source: string /' A sequence of characters giving the source of the entity data '/
+    ' alternateName: string /' An alias for the entity. '/
+    name: string /' The name of the entity. '/
+    ' description: string /' A description of the entity. '/
     ' owner: string
-    ' seeAlso: string
+    ' seeAlso: string /' List of comma separated URLs to one or more related entities. '/
 }
 
 NGSILDBaseModel *-- GeoLocation : location
