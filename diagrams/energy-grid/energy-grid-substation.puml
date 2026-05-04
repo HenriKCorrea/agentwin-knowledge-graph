@@ -17,10 +17,8 @@
 ' A power transformer can be modelled with or without tanks and is intended for use in both balanced and unbalanced representations.
 ' A power transformer typically has two terminals.
 '
-' <<key>> decision:
-' - **`PowerTransformer`** — the overload risk node. The entire scenario motivation is preventing transformer overloads. It is the aggregation point where all `UsagePoint` loads sum up, and the entity whose capacity constraint (`PowerTransformerEnd.ratedS`) must not be breached.
-entity PowerTransformer <<key>> extends ConductingEquipment {
-    Name: string /' Power transformer name. For example, SAMWA0001 '/
+entity PowerTransformer <<context>> extends ConductingEquipment {
+    ' Name: string /' Power transformer name. For example, SAMWA0001 '/
     ' PowerTransformerEnd: double /' The power transformer of this power transformer end. WARNING: This attribute is an inconsistency. Probably copy and paste error. '/
     ' beforeShCircuitHighestOperatingCurrent: double /' The highest operating current (Ib in the IEC 60909-0) before short circuit (depends on network configuration and relevant reliability philosophy). It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. Default: 0.0 '/
     ' beforeShCircuitHighestOperatingVoltage: double /' The highest operating voltage (Ub in the IEC 60909-0) before short circuit. It is used for calculation of the impedance correction factor KT defined in IEC 60909-0. This is worst case voltage on the low side winding (Section 3.7.1 in the standard). Used to define operating conditions. Default: 0.0 '/
