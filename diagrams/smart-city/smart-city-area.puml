@@ -2,6 +2,26 @@
 
 !include smart-city-topology.puml
 
+'----------------------------- USAGE NOTES -----------------------------
+' Instance Identifiers in Practice:
+'   - In Azure Digital Twins and NGSI-LD-based smart city deployments, the instance identifier ($dtId) is used as the primary label for entities and as the target in relationships.
+'   - $dtId is a globally unique string assigned to each digital twin instance; it is referenced directly in relationships and is the main node label in tools like ADT Explorer.
+'
+' Denormalized String References:
+'   - NGSI-LD models often use denormalized string properties (e.g., areaServed) to reference related entities by name or identifier, in addition to formal graph relationships (e.g., Contains/Within from Saref4City or GeoSPARQL).
+'   - This pattern reflects a pragmatic approach: string references coexist with explicit graph topology, enabling flexible but potentially fragile cross-entity linking.
+'
+' Ontology Usage Intent:
+'   - The ontology is designed to support both formal, navigable relationships (for graph traversal and reasoning) and denormalized references (for compatibility and ease of integration with existing systems and APIs).
+'   - These patterns are not mutually exclusive; both are present in real-world deployments and are supported by the ontology authors’ design.
+'----------------------------------------------------------------------
+
+note as NoteDtId
+Each entity has a <b>$dtId</b>:
+* Used as the node label;
+* Reference in relationships.
+end note
+
 ' An administrative division, unit, entity, area or region,
 ' also referred to as a subnational entity, constituent unit, or country subdivision,
 ' is a portion of a country or other region delineated for the purpose of administration.
