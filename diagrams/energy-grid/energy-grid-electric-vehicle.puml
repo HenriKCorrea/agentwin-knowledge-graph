@@ -8,7 +8,7 @@
 
 ' NOTE: EVChargingStation is referenced here for cross-domain linkage,
 ' but it is not defined in the Energy Grid ontology. It belongs to the Smart City ontology.
-entity EVChargingStation <<bridge>> {
+entity EVChargingStation <<open-reference>> {
 }
 
 ' Adapted from CIM and https://github.com/smart-data-models/dataModel.EnergyCIM/ data models: an electric vehicle model

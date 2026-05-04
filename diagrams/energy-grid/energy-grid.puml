@@ -7,6 +7,7 @@ package "Energy Grid Ontology" {
     ' | `<<bridge>>` | The **cross-domain gap marker** — an entity that exists in one ontology but whose counterpart lives in the other; the semantic mapping the agent must negotiate |
     ' | `<<context>>` | Entities that provide **structural topology** — necessary to traverse the graph and locate the key entities, but not themselves decision variables |
     ' | `<<abstract>>` | **Base classes** from the CIM hierarchy — present only to satisfy inheritance chains; carry no scenario-specific semantics |
+    ' | `<<open-reference>>` | An entity **referenced by this ontology but defined in another** — an incomplete cross-domain slot the agent must resolve through reasoning rather than graph traversal |
 
     <style>
     ClassDiagram {
@@ -33,6 +34,11 @@ package "Energy Grid Ontology" {
             BackgroundColor #F5F5F5
             LineColor       #AAAAAA
             FontColor       #888888
+        }
+        .open-reference {
+            BackgroundColor #FFE0B2
+            LineColor       #E65100
+            FontStyle       italic
         }
     }
     </style>
