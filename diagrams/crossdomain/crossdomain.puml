@@ -10,7 +10,7 @@
 
 ' ' EG keeps a dangling reference to the SC entity — this is itself a gap.
 ' ElectricVehicle ..> EVChargingStation : <<EG dangling ref>>\nconnectedTo_ChargingStation\n(defined in SC, not EG)
-"Energy Grid Ontology.EVChargingStation" ..> "Smart City Ontology.EVChargingStation" : connectedTo_ChargingStation\n(defined in SC, not EG)
+"Energy Grid Ontology.EVChargingStation" ..> "Smart City Ontology.EVChargingStation" : resolves_to\n(defined in SC, not EG)
 
 ' ' ── Bridge 1: Central entity bridge ──────────────────────────────────────────
 ' ' The charging station is modelled as physical infrastructure in SC
