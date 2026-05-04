@@ -3,48 +3,22 @@
 !include ../smart-city/smart-city.puml
 !include ../energy-grid/energy-grid.puml
 
-
-' ' =====================================================
-' ' Cross-Domain Semantic Bridges  (dashed arrows)
-' ' =====================================================
-
-' ' EG keeps a dangling reference to the SC entity — this is itself a gap.
-' ElectricVehicle ..> EVChargingStation : <<EG dangling ref>>\nconnectedTo_ChargingStation\n(defined in SC, not EG)
 "Energy Grid Ontology.EVChargingStation" ..> "Smart City Ontology.EVChargingStation" : resolves_to\n(defined in SC, not EG)
-
-' ' ── Bridge 1: Central entity bridge ──────────────────────────────────────────
-' ' The charging station is modelled as physical infrastructure in SC
-' ' and as a logical metering point in EG. The agent must negotiate this
-' ' abstraction-level mismatch for every assignment decision.
-' EVChargingStation ..> UsagePoint : <<Bridge 1>>\nphysical station\nvs.\nlogical metering point
 "Smart City Ontology.EVChargingStation" ..> "Energy Grid Ontology.UsagePoint" : physical station\nvs.\nlogical metering point
-
-' ' ── Bridge 2: Spatial / administrative ───────────────────────────────────────
-' ' City governance partitions space by civic criteria (District, Neighbourhood).
-' ' Grid topology partitions the same space by electrical infrastructure
-' ' (SubGeographicalRegion, Substation). Boundaries rarely align.
-' District      ..> SubGeographicalRegion : <<Bridge 2a>>\ncivic zone\nvs.\nelectrical topology zone
 "Smart City Ontology.District" ..> "Energy Grid Ontology.SubGeographicalRegion" : civic zone\nvs.\nelectrical topology zone
-' Neighbourhood ..> Substation            : <<Bridge 2b>>\nneighbourhood\nvs.\nsubstation service area
 "Smart City Ontology.Neighbourhood" ..> "Energy Grid Ontology.Substation" : neighbourhood\nvs.\nsubstation service area
-
-' ' ── Bridge 3: Coordinate system ──────────────────────────────────────────────
-' GeoLocation ..> Location : <<Bridge 3>>\nGeoJSON geometry\nvs.\nCIM Cartesian (x, y)
 "Smart City Ontology.GeoLocation" ..> "Energy Grid Ontology.Location" : GeoJSON geometry\nvs.\nCIM Cartesian (x, y)
 
-' =====================================================
-' Bridge 1 — Property-level mapping detail
-' =====================================================
 note as PropMap
   <b>Bridge 1 · Property Mappings</b>
   Smart City                    Energy Grid
-  ─────────────────────────────────────────────────────
+  ───────────────────────────────────
   amperage                  ==  ratedCurrent
   capacity (vehicle count)  ->  ratedPower (kW)   [unit convert: kW / kW-per-vehicle]
   availableCapacity         ->  ratedPower - estimatedLoad (kW headroom)
   status (working|outOf...) ->  connectionState   [enum -> string semantic]
   voltage                   ==  nominalServiceVoltage
-  ─────────────────────────────────────────────────────
+  ───────────────────────────────────
 end note
 
 ' =====================================================
@@ -52,7 +26,7 @@ end note
 ' =====================================================
 note as Formula
   <b>EV Assignment Decision</b>
-  ─────────────────────────────────────────────────────────────────────
+  ───────────────────────────────────
   headroom  =  ratedS  -  (sum CustomerLoad.p + sum EquivalentLoad.p
                            + sum UsagePoint.estimatedLoad)
                            [all loads under the same PowerTransformer]
@@ -61,7 +35,7 @@ note as Formula
     1. UsagePoint.connectionState  == "connected"
     2. UsagePoint.ratedPower  -  UsagePoint.estimatedLoad  >=  ev.chargeRateMax
     3. headroom  -  ev.chargeRateMax  >=  0.05 * ratedS    [95% capacity cap]
-  ─────────────────────────────────────────────────────────────────────
+  ───────────────────────────────────
 end note
 
 ' PropMap .. EVChargingStation
