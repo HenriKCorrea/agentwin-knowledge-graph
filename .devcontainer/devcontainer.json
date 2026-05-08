@@ -17,7 +17,7 @@
 			],
 			"settings": {
 				"plantuml.render": "PlantUMLServer",
-				"plantuml.server": "http://plantuml:8080"
+				"plantuml.server": "http://plantuml-server:8080"
 			}
 		}
 	}
