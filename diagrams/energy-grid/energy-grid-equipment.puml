@@ -1,6 +1,7 @@
 @startuml Energy Grid Equipment
 
 !include energy-grid-common.puml
+!include energy-grid-location.puml
 
 ' A power system resource (PSR) can be an item of equipment such as a switch, an equipment container containing many individual items of equipment such as a substation, or an organisational entity such as sub-control area. Power system resources can have measurements associated.
 entity PowerSystemResource <<abstract>> extends IdentifiedObject {
@@ -40,6 +41,8 @@ entity EquipmentContainer <<abstract>> extends ConnectivityNodeContainer {
 ' The parts of the AC power system that are designed to carry current or that are conductively connected through terminals.
 entity ConductingEquipment <<abstract>> extends Equipment {
 }
+
+PowerSystemResource --> Location : Location /' Location of this power system resource. Default: None '/
 
 ' EquipmentContainer "Equipments" <--> "EquipmentContainer" Equipment : contains /' Contained equipment. '/
 Equipment --> EquipmentContainer : EquipmentContainer /' Container of this equipment. '/

@@ -1,0 +1,32 @@
+@startuml Energy Grid Location
+
+' Coordinate reference system
+entity CoordinateSystem <<context>> {
+    name: string /' Coordinate system. For example, WGS84, ETRS89, etc. '/
+    crsUrn: string /' A Uniform Resource Name (URN) for the coordinate reference system (crs) used to define `Location.PositionPoints`. An example would be the European Petroleum Survey Group (EPSG) code for a coordinate reference system, defined in URN under the Open Geospatial Consortium (OGC) namespace as: urn:ogc:def:uom:EPSG::XXXX, where XXXX is an EPSG code (a full list of codes can be found at the EPSG Registry web site http://www.epsg-registry.org/). To define the coordinate system as being WGS84 (latitude, longitude) using an EPSG OGC, this attribute would be urn:ogc:def:uom:EPSG::4236. A profile should limit this code to a set of allowed URNs agreed to by all sending and receiving parties. '/
+}
+
+' Set of spatial coordinates that determine a point, defined in the coordinate system specified in 'Location.CoordinateSystem'. Use a single position point instance to desribe a point-oriented location. Use a sequence of position points to describe a line-oriented object (physical location of non-point oriented objects like cables or lines), or area of an object (like a substation or a geographical zone - in this case, have first and last position point with the same values).
+entity PositionPoint <<context>> {
+    xPosition: double /' X axis position. '/
+    yPosition: double /' Y axis position. '/
+    zPosition: double /' (if applicable) Z axis position. '/
+    sequenceNumber: integer /' Zero-relative sequence number of this point within a series of points. Default: 0 '/
+}
+
+' Location is used to define the absolute position of an assets
+' The place, scene, or point of something where someone or something has been, is, and/or will be at a given moment in time.
+'
+' <<bridge>> decision:
+' - **`Location`** — the Energy Grid side of the Location ↔ GeoLocation semantic gap. CIM models position as scalar
+'   Cartesian coordinates (xPosition/yPosition), while the Smart City ontology uses GeoJSON-typed geometry
+'   (type: GeoType, coordinates: string). The agent must negotiate this coordinate system mismatch when
+'   correlating grid assets (e.g., Substation zones) with Smart City geographic entities.
+entity Location <<bridge>> <<context>> {
+    locationName: string /' location Name '/
+}
+
+Location --> CoordinateSystem : CoordinateSystem /' Coordinate system used to describe position points of this location. '/
+Location --> PositionPoint : PositionPoints /' Sequence of position points describing this location. '/
+
+@enduml
