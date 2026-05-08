@@ -23,5 +23,11 @@ services:
     # (Adding the "ports" property to this file will not forward from a Codespace.)
   plantuml-server:
     image: plantuml/plantuml-server:jetty
+    volumes:
+      # Jetty's default URI/header buffer is 8192 bytes, which is too small for large
+      # PlantUML diagrams (encoded as a GET URL). The override.ini raises the limit to
+      # 64 KB. JAVA_OPTIONS/-D flags do not work for Jetty module properties; the only
+      # reliable way is dropping an ini file into start.d/. See jetty-override.ini.
+      - ./jetty-override.ini:/var/lib/jetty/start.d/override.ini
     ports:
       - 8080:8080
