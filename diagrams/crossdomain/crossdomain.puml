@@ -4,40 +4,24 @@
 !include ../energy-grid/energy-grid.puml
 
 "Energy Grid Ontology.EVChargingStation" ..> "Smart City Ontology.EVChargingStation" : resolves_to\n(defined in SC, not EG)
-"Smart City Ontology.EVChargingStation" ..> "Energy Grid Ontology.CustomerLoad" : physical station\nvs.\nlogical metering point
-"Smart City Ontology.GeoLocation" ..> "Energy Grid Ontology.Location" : GeoJSON geometry\nvs.\nCIM Cartesian (x, y)
-
-note as PropMap
-  <b>Bridge 1 · Property Mappings</b>
-  Smart City                    Energy Grid
-  ───────────────────────────────────
-  amperage                  ==  ratedCurrent
-  capacity (vehicle count)  ->  ratedPower (kW)   [unit convert: kW / kW-per-vehicle]
-  availableCapacity         ->  ratedPower - estimatedLoad (kW headroom)
-  status (working|outOf...) ->  connectionState   [enum -> string semantic]
-  voltage                   ==  nominalServiceVoltage
-  ───────────────────────────────────
-end note
+"Smart City Ontology.EVChargingStation" .. "Energy Grid Ontology.CustomerLoad" : same physical location\n(SC asset <-> EG load entity)
+"Smart City Ontology.GeoLocation" .. "Energy Grid Ontology.Location" : GeoJSON geometry\nvs.\nCIM Cartesian (x, y)
 
 ' =====================================================
 ' Assignment Decision Formula
 ' =====================================================
 note as Formula
   <b>EV Assignment Decision</b>
-  ───────────────────────────────────
-  headroom  =  ratedS  -  (sum CustomerLoad.p + sum EquivalentLoad.p
-                           + sum UsagePoint.estimatedLoad)
-                           [all loads under the same PowerTransformer]
+  ────────────────────────────────────────────────
+  headroom  =  PowerTransformerEnd.ratedS
+               - (sum CustomerLoad.p + sum EquivalentLoad.p)
+               [all loads under the same PowerTransformer]
 
   EV assignable to station iff ALL hold:
-    1. UsagePoint.connectionState  == "connected"
-    2. UsagePoint.ratedPower  -  UsagePoint.estimatedLoad  >=  ev.chargeRateMax
-    3. headroom  -  ev.chargeRateMax  >=  0.05 * ratedS    [95% capacity cap]
-  ───────────────────────────────────
+    1. headroom  -  ElectricVehicle.chargeRateMax  >=  0.05 * PowerTransformerEnd.ratedS   [95% transformer cap]
+    2. EVChargingStation.status  !=  "outOfService" |  "withIncidence"                     [SC check]
+    3. EVChargingStation.availableCapacity  >  0                                           [station-level check]
+  ────────────────────────────────────────────────
 end note
-
-' PropMap .. EVChargingStation
-' Formula .. PowerTransformerE
-
 
 @enduml
