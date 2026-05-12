@@ -1,0 +1,18 @@
+@startuml Energy Grid Connectivity
+
+!include energy-grid-common.puml
+
+' Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
+entity ConnectivityNode <<context>> extends IdentifiedObject {
+    terminalCount: integer /' The connectivity node to which this terminal connects with zero impedance. This propoerty to defined total number of terminals connected to a node. '/
+}
+
+' A base class for all objects that may contain connectivity nodes or topological nodes.
+entity ConnectivityNodeContainer <<abstract>> extends PowerSystemResource {
+}
+
+' ConnectivityNode --> BoundaryPoint : BoundaryPoint /' The boundary point associated with the connectivity node. '/
+ConnectivityNode --> ConnectivityNodeContainer : ConnectivityNodeContainer /' Container of this connectivity node. '/
+ConnectivityNodeContainer --> ConnectivityNode : ConnectivityNodes /' Connectivity nodes which belong to this connectivity node container. '/
+
+@enduml

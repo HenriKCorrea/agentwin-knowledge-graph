@@ -1,5 +1,7 @@
 @startuml Energy Grid Common
 
+!include energy-grid-location.puml
+
 ' This is a root class to provide common identification for all classes needing identification and naming attributes.
 entity IdentifiedObject <<abstract>> {
     ' description: string /' The description is a free human readable text describing or naming the object. It may be non unique and may not correlate to a naming hierarchy. '/
@@ -8,5 +10,11 @@ entity IdentifiedObject <<abstract>> {
     ' energyIdentCodeEic: string /' The attribute is used for an exchange of the EIC code (Energy identification Code). The length of the string is 16 characters as defined by the EIC code. For details on EIC scheme please refer to ENTSO-E web site. '/
     ' shortName: string /' The attribute is used for an exchange of a human readable short name with length of the string 12 characters maximum. '/
 }
+
+' A power system resource (PSR) can be an item of equipment such as a switch, an equipment container containing many individual items of equipment such as a substation, or an organisational entity such as sub-control area. Power system resources can have measurements associated.
+entity PowerSystemResource <<abstract>> extends IdentifiedObject {
+}
+
+PowerSystemResource --> Location : Location /' Location of this power system resource. Default: None '/
 
 @enduml

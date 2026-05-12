@@ -45,6 +45,7 @@ package "Energy Grid Ontology" {
 
     !include energy-grid-load.puml
     !include energy-grid-substation.puml
+    !include energy-grid-terminal.puml
     !include energy-grid-electric-vehicle.puml
 }
 @enduml

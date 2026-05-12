@@ -1,22 +1,11 @@
 @startuml Energy Grid Equipment
 
-!include energy-grid-common.puml
-!include energy-grid-location.puml
+!include energy-grid-connectivity.puml
+' !include energy-grid-voltage.puml
 
-' A power system resource (PSR) can be an item of equipment such as a switch, an equipment container containing many individual items of equipment such as a substation, or an organisational entity such as sub-control area. Power system resources can have measurements associated.
-entity PowerSystemResource <<abstract>> extends IdentifiedObject {
-}
-
-' ' Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
-' entity ConnectivityNode extends IdentifiedObject {
-'     TerminalCount: int /' The connectivity node to which this terminal connects with zero impedance. This propoerty to defined total number of terminals connected to a node. '/
-'     -- BoundaryPoint --> BoundaryPoint /' The boundary point associated with this connectivity node. '/
-'     ' ConnectivityNodeContainer --> ConnectivityNodeContainer /' Container of this connectivity node. '/ 
-' }
-
-' A base class for all objects that may contain connectivity nodes or topological nodes.
-entity ConnectivityNodeContainer <<abstract>> extends PowerSystemResource  {
-    ' connectivityNodes --> ConnectivityNode /' Connectivity nodes contained in this container. '/
+' A modelling construct to provide a root class for containing equipment.
+entity EquipmentContainer <<abstract>> extends ConnectivityNodeContainer {
+    ' Equipments --> Equipment /' Contained equipment. '/
 }
 
 ' The parts of a power system that are physical devices, electronic or mechanical.
@@ -27,12 +16,6 @@ entity Equipment <<abstract>> extends PowerSystemResource {
     ' -- OperationalLimitSet --> OperationalLimitSet /' The operational limit sets associated with this equipment. '/
 }
 
-' A modelling construct to provide a root class for containing equipment.
-entity EquipmentContainer <<abstract>> extends ConnectivityNodeContainer {
-    ' Equipments --> Equipment /' Contained equipment. '/
-}
-
-
 ' Defines a system base voltage which is referenced.
 ' entity BaseVoltage extends IdentifiedObject {
 '     nominalVoltage: float /' The power system resource's base voltage. Shall be a positive value and not zero. '/
@@ -42,16 +25,10 @@ entity EquipmentContainer <<abstract>> extends ConnectivityNodeContainer {
 entity ConductingEquipment <<abstract>> extends Equipment {
 }
 
-PowerSystemResource --> Location : Location /' Location of this power system resource. Default: None '/
-
 ' EquipmentContainer "Equipments" <--> "EquipmentContainer" Equipment : contains /' Contained equipment. '/
 Equipment --> EquipmentContainer : EquipmentContainer /' Container of this equipment. '/
 
 EquipmentContainer --> Equipment : Equipments /' Contained equipment. '/
-
-' ConnectivityNodeContainer --> ConnectivityNode : connectivityNodes /' Connectivity nodes contained in this container. '/
-
-' ConnectivityNode --> ConnectivityNodeContainer : ConnectivityNodeContainer /' Container of this connectivity node. '/ 
 
 ' ConductingEquipment --> BaseVoltage : BaseVoltage /' Base voltage of this conducting equipment. Use only when there is no voltage level container used and only one base voltage applies. For example, not used for transformers. '/
 
