@@ -43,8 +43,7 @@ package "Smart City Ontology" {
     }
     </style>
 
-    !include smart-city-object.puml
-    !include smart-city-area.puml
+    !include smart-city-pole.puml
 }
 
 @enduml

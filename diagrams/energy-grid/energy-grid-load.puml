@@ -1,0 +1,32 @@
+@startuml Energy Grid Customer Load
+
+!include energy-grid-energy.puml
+' !include energy-grid-voltage.puml
+
+' According to IEC 61968-13, a MV  customer is a CustomerLoad.
+'
+' <<key>> decision:
+' - **`CustomerLoad`** — MV background load contributing to transformer stress. Its `p` (active power) is part of the total load
+'   the transformer must carry before any EV charging is added. The agent must sum all CustomerLoad.p values under a
+'   transformer to correctly compute available headroom: headroom = ratedS − (ΣCustomerLoad.p + ΣEquivalentLoad.p + ΣUsagePoint.estimatedLoad).
+'   Without it, the agent risks overloading a transformer that is already near capacity from MV commercial/industrial customers.
+entity CustomerLoad <<key>> extends EnergyConsumer {
+    p: float /' Active power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' q: float /' Reactive power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' powerFactor: float /' the power factor value '/
+}
+
+' According to IEC 61968-13, a LV customer is an EquivalentLoad.
+' An EquivalentLoad has the attribute customerCount having its value greater than one
+' to indicate the number of customers attached.
+' The voltage level is specified by a voltage level that contains this EquivalentLoad.
+entity EquivalentLoad <<key>> extends EnergyConsumer {
+    p: float /' Active power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' q: float /' Reactive power of the load. Load sign convention is used, i.e. positive sign means flow out from a node. For voltage dependent loads the value is at rated voltage. Starting value for a steady state solution. Default: 0.0 '/
+    ' powerFactor: float /' the power factor value '/
+    customerCount: integer /' the attribute that indicate the number of customers attached '/    
+}
+
+' CustomerLoad --> VoltageLevel : MemberOf_EquipmentContainerVL /' A CustomerLoad can be assciated to an equipment container via the same voltage level. '/
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml Energy Grid Energy
+
+!include energy-grid-equipment.puml
+
+' A connection of energy generation or consumption on the power system model.
+entity EnergyConnection <<abstract>> extends ConductingEquipment {
+}
+
+' According to IEC 61970-301, an EnergyConsumer is a generic user of energy - a  point of consumption on the power system model.
+' EnergyConsumer.pfixed, .qfixed, .pfixedPct and .qfixedPct have meaning
+' only if there is no LoadResponseCharacteristic associated with EnergyConsumer or
+' if LoadResponseCharacteristic.exponentModel is set to False.
+entity EnergyConsumer <<context>> extends EnergyConnection {
+    ' pfixed: float /' Active power of the load that is a fixed quantity and does not vary as load group value varies. Load sign convention is used, i.e. positive sign means flow out from a node.  '/
+    ' pfixedPct: float /' Fixed active power as a percentage of load group fixed active power. Used to represent the time-varying components.  Load sign convention is used, i.e. positive sign means flow out from a node. '/
+    ' qfixed: float /' Reactive power of the load that is a fixed quantity and does not vary as load group value varies. Load sign convention is used, i.e. positive sign means flow out from a node. '/
+    ' qfixedPct: float /' Fixed reactive power as a percentage of load group fixed reactive power. Used to represent the time-varying components.  Load sign convention is used, i.e. positive sign means flow out from a node. '/
+}
+
+@enduml

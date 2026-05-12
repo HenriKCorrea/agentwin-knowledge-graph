@@ -4,9 +4,7 @@
 !include ../energy-grid/energy-grid.puml
 
 "Energy Grid Ontology.EVChargingStation" ..> "Smart City Ontology.EVChargingStation" : resolves_to\n(defined in SC, not EG)
-"Smart City Ontology.EVChargingStation" ..> "Energy Grid Ontology.UsagePoint" : physical station\nvs.\nlogical metering point
-"Smart City Ontology.District" ..> "Energy Grid Ontology.SubGeographicalRegion" : civic zone\nvs.\nelectrical topology zone
-"Smart City Ontology.Neighbourhood" ..> "Energy Grid Ontology.Substation" : neighbourhood\nvs.\nsubstation service area
+"Smart City Ontology.EVChargingStation" ..> "Energy Grid Ontology.CustomerLoad" : physical station\nvs.\nlogical metering point
 "Smart City Ontology.GeoLocation" ..> "Energy Grid Ontology.Location" : GeoJSON geometry\nvs.\nCIM Cartesian (x, y)
 
 note as PropMap

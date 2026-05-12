@@ -4,13 +4,13 @@
 !include energy-grid-location.puml
 
 ' A subset of a geographical region of a power system network model.
-entity SubGeographicalRegion <<context>> extends IdentifiedObject, Location {
+entity SubGeographicalRegion <<abstract>> extends IdentifiedObject, Location {
 }
 
 ' A geographical region of a power system network model.
-' entity GeographicalRegion extends IdentifiedObject, Location {
-' }
+entity GeographicalRegion <<abstract>> extends IdentifiedObject, Location {
+}
 
-' SubGeographicalRegion --> GeographicalRegion : withIn /' The geographical region which this sub-geographical region is within. '/
+SubGeographicalRegion --> GeographicalRegion : withIn /' The geographical region which this sub-geographical region is within. '/
 
 @enduml

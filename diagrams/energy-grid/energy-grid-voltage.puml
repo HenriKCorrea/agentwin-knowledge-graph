@@ -1,0 +1,21 @@
+@startuml Energy Grid Voltage
+
+!include energy-grid-substation.puml
+
+' Defines a system base voltage which is referenced.
+entity BaseVoltage <<abstract>> extends IdentifiedObject {
+    ' nominalVoltage: float /' The power system resource's base voltage. Shall be a positive value and not zero. '/
+}
+
+' A collection of equipment at one common system voltage forming a switchgear.
+' The equipment typically consists of breakers, busbars, instrumentation, control, regulation and protection devices as well as assemblies of all these.
+entity VoltageLevel <<abstract>> extends EquipmentContainer {
+    ' highVoltageLimit: float /' The bus bar's high voltage limit.\nThe limit applies to all equipment and nodes contained in a given VoltageLevel. It is not required that it is exchanged in pair with lowVoltageLimit. It is preferable to use operational VoltageLimit, which prevails, if present. '/
+    ' lowVoltageLimit: float /' The bus bar's low voltage limit.\nThe limit applies to all equipment and nodes contained in a given VoltageLevel. It is not required that it is exchanged in pair with highVoltageLimit. It is preferable to use operational VoltageLimit, which prevails, if present. '/
+}
+
+VoltageLevel --> Substation : MemberOf_Substation /' Shows a relationship to a substation '/
+
+VoltageLevel --> BaseVoltage : assignedBaseVoltage /' The base voltage used for all equipment within the voltage level. '/
+
+@enduml

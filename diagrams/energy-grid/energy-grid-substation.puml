@@ -1,7 +1,7 @@
 @startuml Energy Grid Substation
 
 !include energy-grid-equipment.puml
-!include energy-grid-region.puml
+' !include energy-grid-region.puml
 
 ' The type of substations
 ' MV/LV type determines which distribution level serves the charging stations
@@ -62,6 +62,6 @@ PowerTransformer --> PowerTransformerEnd : PowerTransformerEnds /' The ends of t
 
 PowerTransformer --> Substation : MemberOf_Substation /' The associations for PowerTransformer containment are: Substation -> PowerTransformer -> TransformerWinding '/
 
-Substation --> SubGeographicalRegion : locatedAt /' The SubGeographicalRegion containing the substation. '/
+' Substation --> SubGeographicalRegion : locatedAt /' The SubGeographicalRegion containing the substation. '/
 
 @enduml
