@@ -61,8 +61,8 @@ entity EVChargingStation <<key>> <<bridge>> extends NGSILDBaseModel {
     ' network: string /' The name of the Network, with that the operator cooperates. '/
     ' operator: string /' Charging station's operator. '/
     ' contactPoint: ContactPoint /' Charging station contact point. '/
-    amperage: double /' The total amperage offered by the charging station. Units:'Ampers (A) '/
-    voltage: double /' The total voltage offered by the charging station. Units:'Volts (V)' '/
+    ' amperage: double /' The total amperage offered by the charging station. Units:'Ampers (A) '/
+    ' voltage: double /' The total voltage offered by the charging station. Units:'Volts (V)' '/
     ' chargeType: enum {annualPayment, flat, free, monthlyPayment, other} /'  '/
     ' acceptedPaymentMethod: enum {ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm} /' Type(s) of charge when using this station. Model:'https://schema.org/Text'. Enum:'ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, GoogleCheckout, PayPal, PaySwarm' '/
 }
