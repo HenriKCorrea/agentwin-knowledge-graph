@@ -12,16 +12,15 @@
 ' =====================================================
 note as Formula
   <b>EV Assignment Decision</b>
-  ────────────────────────────────────────────────
-  headroom  =  PowerTransformerEnd.ratedS
-               - (sum CustomerLoad.p + sum EquivalentLoad.p)
-               [all loads under the same PowerTransformer]
+  ────────────────
+  headroom = ratedS - Σ(loads.p)
+  (per transformer)
 
-  EV assignable to station iff ALL hold:
-    1. headroom  -  ElectricVehicle.chargeRateMax  >=  0.05 * PowerTransformerEnd.ratedS   [95% transformer cap]
-    2. EVChargingStation.status  !=  "outOfService" |  "withIncidence"                     [SC check]
-    3. EVChargingStation.availableCapacity  >  0                                           [station-level check]
-  ────────────────────────────────────────────────
+  Assign EV if conditions are met:
+    1. headroom - chargeRateMax ≥ 5% of ratedS
+    2. station.status ≠ "outOfService" or "withIncidence"
+    3. station.availableCapacity > 0
+  ────────────────
 end note
 
 @enduml
