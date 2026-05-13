@@ -7,3 +7,7 @@
 [submodule "dataModel.EnergyCIM"]
 	path = dataModel.EnergyCIM
 	url = https://github.com/smart-data-models/dataModel.EnergyCIM.git
+[submodule "agentwin-msc"]
+	path = agentwin-msc
+	url = https://github.com/henrikcorrea/agentwin-msc
+	branch = main
