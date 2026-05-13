@@ -4,9 +4,6 @@
 [submodule "opendigitaltwins-energygrid"]
 	path = opendigitaltwins-energygrid
 	url = https://github.com/henrikcorrea/opendigitaltwins-energygrid.git
-[submodule "pep"]
-	path = pep
-	url = https://github.com/henrikcorrea/pep.git
 [submodule "dataModel.EnergyCIM"]
 	path = dataModel.EnergyCIM
 	url = https://github.com/smart-data-models/dataModel.EnergyCIM.git
