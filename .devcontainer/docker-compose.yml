@@ -22,7 +22,7 @@ services:
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
     # (Adding the "ports" property to this file will not forward from a Codespace.)
   plantuml-server:
-    image: plantuml/plantuml-server:jetty
+    image: docker.io/plantuml/plantuml-server:jetty
     volumes:
       # Jetty's default URI/header buffer is 8192 bytes, which is too small for large
       # PlantUML diagrams (encoded as a GET URL). The override.ini raises the limit to
